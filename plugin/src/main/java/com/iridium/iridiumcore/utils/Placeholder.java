@@ -1,15 +1,17 @@
 package com.iridium.iridiumcore.utils;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents a placeholder used in configuration files.
  */
 @Getter
+@NoArgsConstructor
 public class Placeholder {
 
-    private final String key;
-    private final String value;
+    private String key;
+    private String value;
 
     /**
      * The default constructor.
