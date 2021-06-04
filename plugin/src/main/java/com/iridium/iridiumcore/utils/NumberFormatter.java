@@ -1,6 +1,6 @@
 package com.iridium.iridiumcore.utils;
 
-import com.iridium.iridiumcore.IridiumCore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,14 +10,17 @@ import java.math.RoundingMode;
  */
 public class NumberFormatter {
 
-    private static final int numberAbbreviationDecimalPlaces = 2;
-    private static final String thousandAbbreviation = "K";
-    private static final String millionAbbreviation = "M";
-    private static final String billionAbbreviation = "B";
-    private static final boolean displayNumberAbbreviations = true;
-    private static final BigDecimal ONE_THOUSAND = new BigDecimal(1000);
-    private static final BigDecimal ONE_MILLION = new BigDecimal(1000000);
-    private static final BigDecimal ONE_BILLION = new BigDecimal(1000000000);
+    private int numberAbbreviationDecimalPlaces = 2;
+    private String thousandAbbreviation = "K";
+    private String millionAbbreviation = "M";
+    private String billionAbbreviation = "B";
+    private boolean displayNumberAbbreviations = true;
+    @JsonIgnore
+    private final BigDecimal ONE_THOUSAND = new BigDecimal(1000);
+    @JsonIgnore
+    private final BigDecimal ONE_MILLION = new BigDecimal(1000000);
+    @JsonIgnore
+    private final BigDecimal ONE_BILLION = new BigDecimal(1000000000);
 
     /**
      * Formats a provided number as configured by the user.
@@ -26,7 +29,7 @@ public class NumberFormatter {
      * @param number The number which should be formatted
      * @return The formatted version of the number. May not be parsed by {@link Double#valueOf(String)}
      */
-    public static String format(double number) {
+    public String format(double number) {
         if (displayNumberAbbreviations) {
             return formatNumber(BigDecimal.valueOf(number));
         } else {
@@ -41,7 +44,7 @@ public class NumberFormatter {
      * @param bigDecimal The BigDecimal that should be formatted
      * @return The formatted version of the number. Cannot be parsed by {@link Double#valueOf(String)}
      */
-    private static String formatNumber(BigDecimal bigDecimal) {
+    private String formatNumber(BigDecimal bigDecimal) {
         bigDecimal = bigDecimal.setScale(numberAbbreviationDecimalPlaces, RoundingMode.HALF_DOWN);
         StringBuilder outputStringBuilder = new StringBuilder();
 
