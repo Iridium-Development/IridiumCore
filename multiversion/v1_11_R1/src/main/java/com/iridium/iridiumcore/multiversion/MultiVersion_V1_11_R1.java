@@ -3,6 +3,7 @@ package com.iridium.iridiumcore.multiversion;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 /**
  * Interface for working with methods that were changed during an update by Spigot.
@@ -22,6 +23,11 @@ public class MultiVersion_V1_11_R1 implements MultiVersion {
     @SuppressWarnings("deprecation")
     public XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z) {
         return XMaterial.matchXMaterial(Material.getMaterial(chunk.getBlockTypeId(x, y, z)));
+    }
+
+    @Override
+    public boolean isPassable(Block block) {
+        return block.getType().equals(Material.AIR);
     }
 
 }

@@ -2,6 +2,7 @@ package com.iridium.iridiumcore.multiversion;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.block.Block;
 
 /**
  * Interface for working with methods that were changed during an update by Spigot.
@@ -18,5 +19,12 @@ public interface MultiVersion {
      * @return The material at the provided position in the chunk
      */
     XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z);
+
+    /**
+     * Returns if a player can pass through a block
+     * @param block The specified block
+     * @return if a player cna pass through the block or not
+     */
+    boolean isPassable(Block block);
 
 }
