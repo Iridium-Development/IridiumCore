@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.bukkit.Bukkit;
@@ -217,8 +218,8 @@ public class Persist {
      */
     public enum PersistType {
 
-        YAML(".yml", new YAMLFactory()),
-        JSON(".json", new JsonFactory());
+        YAML(".yml", new YAMLFactory().configure(JsonParser.Feature.IGNORE_UNDEFINED, true)),
+        JSON(".json", new JsonFactory().configure(JsonParser.Feature.IGNORE_UNDEFINED, true));
 
         private final String extension;
         private final JsonFactory factory;
