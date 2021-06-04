@@ -30,7 +30,7 @@ public class Persist {
         this.persistType = persistType;
         this.javaPlugin = javaPlugin;
 
-        objectMapper = new ObjectMapper(persistType.getFactory());
+        objectMapper = new ObjectMapper(persistType.getFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
     }
 
     /**
@@ -218,8 +218,8 @@ public class Persist {
      */
     public enum PersistType {
 
-        YAML(".yml", new YAMLFactory().configure(JsonParser.Feature.IGNORE_UNDEFINED, true)),
-        JSON(".json", new JsonFactory().configure(JsonParser.Feature.IGNORE_UNDEFINED, true));
+        YAML(".yml", new YAMLFactory()),
+        JSON(".json", new JsonFactory());
 
         private final String extension;
         private final JsonFactory factory;
