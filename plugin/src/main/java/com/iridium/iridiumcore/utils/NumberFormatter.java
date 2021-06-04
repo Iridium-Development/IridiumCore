@@ -10,11 +10,11 @@ import java.math.RoundingMode;
  */
 public class NumberFormatter {
 
-    private int numberAbbreviationDecimalPlaces = 2;
-    private String thousandAbbreviation = "K";
-    private String millionAbbreviation = "M";
-    private String billionAbbreviation = "B";
-    private boolean displayNumberAbbreviations = true;
+    public int numberAbbreviationDecimalPlaces = 2;
+    public String thousandAbbreviation = "K";
+    public String millionAbbreviation = "M";
+    public String billionAbbreviation = "B";
+    public boolean displayNumberAbbreviations = true;
     @JsonIgnore
     private final BigDecimal ONE_THOUSAND = new BigDecimal(1000);
     @JsonIgnore
