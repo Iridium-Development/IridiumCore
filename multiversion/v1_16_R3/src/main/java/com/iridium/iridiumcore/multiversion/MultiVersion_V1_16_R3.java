@@ -2,6 +2,7 @@ package com.iridium.iridiumcore.multiversion;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_16_R3.legacy.CraftLegacy;
 
 public class MultiVersion_V1_16_R3 implements MultiVersion {
@@ -23,6 +24,11 @@ public class MultiVersion_V1_16_R3 implements MultiVersion {
     @Override
     public XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z) {
         return XMaterial.matchXMaterial(chunk.getBlockType(x, y, z));
+    }
+
+    @Override
+    public boolean isPassable(Block block) {
+        return block.isPassable();
     }
 
 }
