@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
  * Represents a placeholder used in configuration files.
  */
 @Getter
-@NoArgsConstructor
 public class Placeholder {
 
     private String key;
