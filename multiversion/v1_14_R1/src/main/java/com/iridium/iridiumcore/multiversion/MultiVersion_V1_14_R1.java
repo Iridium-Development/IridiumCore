@@ -1,9 +1,15 @@
 package com.iridium.iridiumcore.multiversion;
 
 import com.cryptomorin.xseries.XMaterial;
+import io.papermc.lib.PaperLib;
+import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_14_R1.util.CraftLegacy;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Interface for working with methods that were changed during an update by Spigot.
@@ -32,6 +38,16 @@ public class MultiVersion_V1_14_R1 implements MultiVersion {
     @Override
     public boolean isPassable(Block block) {
         return block.isPassable();
+    }
+
+    @Override
+    public CompletableFuture<Chunk> getChunkAt(World world, int x, int z) {
+        return PaperLib.getChunkAtAsync(world, x, z, true);
+    }
+
+    @Override
+    public CompletableFuture<Chunk> getChunkAt(Location location) {
+        return getChunkAt(location.getWorld(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
 }
