@@ -30,7 +30,7 @@ public abstract class MultiVersion {
      * @param z     The relative z position of the block in the chunk
      * @return The material at the provided position in the chunk
      */
-    abstract XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z);
+    public abstract XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z);
 
     /**
      * Returns if a player can pass through a block
@@ -38,7 +38,7 @@ public abstract class MultiVersion {
      * @param block The specified block
      * @return if a player cna pass through the block or not
      */
-    abstract boolean isPassable(Block block);
+    public abstract boolean isPassable(Block block);
 
     /**
      * Gets the chunk at this location
@@ -48,7 +48,7 @@ public abstract class MultiVersion {
      * @param z     The chunk's z coord
      * @return The chunk
      */
-    abstract CompletableFuture<Chunk> getChunkAt(World world, int x, int z);
+    public abstract CompletableFuture<Chunk> getChunkAt(World world, int x, int z);
 
     /**
      * Gets the chunk at this location
