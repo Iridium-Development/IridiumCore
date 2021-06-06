@@ -124,7 +124,7 @@ public class ItemStackUtils {
             bukkitObjectOutputStream.flush();
 
             return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
-        } catch (IOException e) {
+        } catch (Exception e) {
             return "";
         }
     }
@@ -141,7 +141,7 @@ public class ItemStackUtils {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.getDecoder().decode(string));
             BukkitObjectInputStream bukkitObjectInputStream = new BukkitObjectInputStream(byteArrayInputStream);
             return (ItemStack) bukkitObjectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             return XMaterial.AIR.parseItem();
         }
     }
