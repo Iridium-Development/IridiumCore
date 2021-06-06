@@ -8,16 +8,18 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_14_R1.util.CraftLegacy;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Interface for working with methods that were changed during an update by Spigot.
  */
-public class MultiVersion_V1_14_R1 implements MultiVersion {
+public class MultiVersion_V1_14_R1 extends MultiVersion {
 
     @SuppressWarnings("deprecation")
-    public MultiVersion_V1_14_R1(){
+    public MultiVersion_V1_14_R1(JavaPlugin javaPlugin) {
+        super(javaPlugin);
         new CraftLegacy();
     }
 
@@ -43,11 +45,6 @@ public class MultiVersion_V1_14_R1 implements MultiVersion {
     @Override
     public CompletableFuture<Chunk> getChunkAt(World world, int x, int z) {
         return PaperLib.getChunkAtAsync(world, x, z, true);
-    }
-
-    @Override
-    public CompletableFuture<Chunk> getChunkAt(Location location) {
-        return getChunkAt(location.getWorld(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
 }

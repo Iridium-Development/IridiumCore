@@ -2,6 +2,7 @@ package com.iridium.iridiumcore;
 
 import com.iridium.iridiumcore.multiversion.*;
 import com.iridium.iridiumcore.nms.*;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Supplier;
 
@@ -29,9 +30,9 @@ public enum MinecraftVersion {
     V1_16_R3(() -> new NMS_V1_16_R3(), MultiVersion_V1_16_R3::new);
 
     private final Supplier<NMS> nmsSupplier;
-    private final Supplier<MultiVersion> multiVersionSupplier;
+    private final JavaPluginSupplier<MultiVersion> multiVersionSupplier;
 
-    MinecraftVersion(Supplier<NMS> nmsSupplier, Supplier<MultiVersion> multiVersionSupplier) {
+    MinecraftVersion(Supplier<NMS> nmsSupplier, JavaPluginSupplier<MultiVersion> multiVersionSupplier) {
         this.nmsSupplier = nmsSupplier;
         this.multiVersionSupplier = multiVersionSupplier;
     }
@@ -40,8 +41,8 @@ public enum MinecraftVersion {
         return nmsSupplier.get();
     }
 
-    public MultiVersion getMultiVersion() {
-        return multiVersionSupplier.get();
+    public MultiVersion getMultiVersion(JavaPlugin javaPlugin) {
+        return multiVersionSupplier.get(javaPlugin);
     }
 
     public static MinecraftVersion byName(String version) {

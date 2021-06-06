@@ -110,7 +110,7 @@ public class IridiumCore extends JavaPlugin {
         }
 
         this.nms = minecraftVersion.getNms();
-        this.multiVersion = minecraftVersion.getMultiVersion();
+        this.multiVersion = minecraftVersion.getMultiVersion(this);
     }
 
     /**
