@@ -6,13 +6,20 @@ import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Interface for working with methods that were changed during an update by Spigot.
  */
-public interface MultiVersion {
+public abstract class MultiVersion {
+
+    public JavaPlugin javaPlugin;
+
+    public MultiVersion(JavaPlugin javaPlugin) {
+        this.javaPlugin = javaPlugin;
+    }
 
     /**
      * Returns the material at a position in a chunk.
@@ -23,7 +30,7 @@ public interface MultiVersion {
      * @param z     The relative z position of the block in the chunk
      * @return The material at the provided position in the chunk
      */
-    XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z);
+    abstract XMaterial getMaterialAtPosition(ChunkSnapshot chunk, int x, int y, int z);
 
     /**
      * Returns if a player can pass through a block
@@ -31,7 +38,7 @@ public interface MultiVersion {
      * @param block The specified block
      * @return if a player cna pass through the block or not
      */
-    boolean isPassable(Block block);
+    abstract boolean isPassable(Block block);
 
     /**
      * Gets the chunk at this location
@@ -41,7 +48,7 @@ public interface MultiVersion {
      * @param z     The chunk's z coord
      * @return The chunk
      */
-    CompletableFuture<Chunk> getChunkAt(World world, int x, int z);
+    abstract CompletableFuture<Chunk> getChunkAt(World world, int x, int z);
 
     /**
      * Gets the chunk at this location
@@ -49,6 +56,8 @@ public interface MultiVersion {
      * @param location The location of the chunk
      * @return The chunk
      */
-    CompletableFuture<Chunk> getChunkAt(Location location);
+    public CompletableFuture<Chunk> getChunkAt(Location location){
+        return getChunkAt(location.getWorld(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
+    }
 
 }

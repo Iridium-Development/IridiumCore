@@ -8,13 +8,15 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_16_R3.legacy.CraftLegacy;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.concurrent.CompletableFuture;
 
-public class MultiVersion_V1_16_R3 implements MultiVersion {
+public class MultiVersion_V1_16_R3 extends MultiVersion {
 
     @SuppressWarnings("deprecation")
-    public MultiVersion_V1_16_R3() {
+    public MultiVersion_V1_16_R3(JavaPlugin javaPlugin) {
+        super(javaPlugin);
         CraftLegacy.init();
     }
 
@@ -40,11 +42,6 @@ public class MultiVersion_V1_16_R3 implements MultiVersion {
     @Override
     public CompletableFuture<Chunk> getChunkAt(World world, int x, int z) {
         return PaperLib.getChunkAtAsync(world, x, z, true);
-    }
-
-    @Override
-    public CompletableFuture<Chunk> getChunkAt(Location location) {
-        return getChunkAt(location.getWorld(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
 }
