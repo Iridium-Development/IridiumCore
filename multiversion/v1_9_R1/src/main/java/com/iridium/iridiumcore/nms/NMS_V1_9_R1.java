@@ -126,4 +126,9 @@ public class NMS_V1_9_R1 implements NMS {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutTitle);
     }
 
+    @Override
+    public double[] getTPS() {
+        return MinecraftServer.getServer().recentTps;
+    }
+
 }
