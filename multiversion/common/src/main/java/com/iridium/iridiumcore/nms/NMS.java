@@ -71,4 +71,9 @@ public interface NMS {
    */
   void sendTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut);
 
+  /**
+   * @return The server's recent tps
+   */
+  double[] getTPS();
+
 }
