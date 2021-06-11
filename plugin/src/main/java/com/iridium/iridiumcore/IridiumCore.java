@@ -62,13 +62,6 @@ public class IridiumCore extends JavaPlugin {
                 ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
             }
         }), 0, 20);
-
-        getLogger().info("----------------------------------------");
-        getLogger().info("");
-        getLogger().info(getDescription().getName() + " Enabled!");
-        getLogger().info("Version: " + getDescription().getVersion());
-        getLogger().info("");
-        getLogger().info("----------------------------------------");
     }
 
     /**
