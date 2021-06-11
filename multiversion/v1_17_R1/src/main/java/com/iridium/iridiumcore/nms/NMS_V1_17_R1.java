@@ -2,7 +2,7 @@ package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.network.protocol.game.PacketPlayOutMapChunk;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.World;
@@ -101,7 +101,7 @@ public class NMS_V1_17_R1 implements NMS {
             worldBorder.transitionSizeBetween(size - 0.1D, size, 20000000L);
         }
 
-        ((CraftPlayer) player).getHandle().b.sendPacket(new PacketPlayOutWorldBorder(worldBorder, PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE));
+        ((CraftPlayer) player).getHandle().b.sendPacket(new ClientboundInitializeBorderPacket(worldBorder));
     }
 
     /**
@@ -116,11 +116,11 @@ public class NMS_V1_17_R1 implements NMS {
     @Override
     public void sendSubTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
         player.sendTitle(
-            "",
-            ChatColor.translateAlternateColorCodes('&', message),
-            fadeIn,
-            displayTime,
-            fadeOut
+                "",
+                ChatColor.translateAlternateColorCodes('&', message),
+                fadeIn,
+                displayTime,
+                fadeOut
         );
     }
 
@@ -136,11 +136,11 @@ public class NMS_V1_17_R1 implements NMS {
     @Override
     public void sendTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
         player.sendTitle(
-            ChatColor.translateAlternateColorCodes('&', message),
-            "",
-            fadeIn,
-            displayTime,
-            fadeOut
+                ChatColor.translateAlternateColorCodes('&', message),
+                "",
+                fadeIn,
+                displayTime,
+                fadeOut
         );
     }
 
