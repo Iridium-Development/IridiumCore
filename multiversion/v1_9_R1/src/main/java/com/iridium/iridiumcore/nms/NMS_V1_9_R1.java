@@ -120,7 +120,7 @@ public class NMS_V1_9_R1 implements NMS {
      * @param displayTime The amount of time this subtitle should stay fully visible in ticks
      * @param fadeOut     The amount of time this subtitle should fade out in ticks
      */
-    public void sendSubTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
+    private void sendSubTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
         IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\":\"" + message + "\"}"));
         PacketPlayOutTitle packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, chatBaseComponent, fadeIn, displayTime, fadeOut);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutTitle);
@@ -135,7 +135,7 @@ public class NMS_V1_9_R1 implements NMS {
      * @param displayTime The amount of time this title should stay fully visible in ticks
      * @param fadeOut     The amount of time this title should fade out in ticks
      */
-    public void sendTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
+    private void sendTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
         IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\":\"" + message + "\"}"));
         PacketPlayOutTitle packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, chatBaseComponent, fadeIn, displayTime, fadeOut);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutTitle);
