@@ -50,26 +50,16 @@ public interface NMS {
   void sendWorldBorder(Player player, Color color, double size, Location centerLocation);
 
   /**
-   * Sends a subtitle with the provided properties to the Player.
-   *
-   * @param player      The Player which should see the subtitle
-   * @param message     The message of the subtitle
-   * @param fadeIn      The amount of time this subtitle should fade in in ticks
-   * @param displayTime The amount of time this subtitle should stay fully visible in ticks
-   * @param fadeOut     The amount of time this subtitle should fade out in ticks
-   */
-  void sendSubTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut);
-
-  /**
    * Sends a title with the provided properties to the Player.
    *
    * @param player      The Player which should see the title
-   * @param message     The message of the title
+   * @param title       The upper message of the title
+   * @param subtitle    The lower message of the title
    * @param fadeIn      The amount of time this title should fade in in ticks
    * @param displayTime The amount of time this title should stay fully visible in ticks
    * @param fadeOut     The amount of time this title should fade out in ticks
    */
-  void sendTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut);
+  void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut);
 
   /**
    * @return The server's recent tps
