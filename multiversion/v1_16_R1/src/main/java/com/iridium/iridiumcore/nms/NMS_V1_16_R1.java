@@ -95,35 +95,24 @@ public class NMS_V1_16_R1 implements NMS {
     }
 
     /**
-     * Sends a subtitle with the provided properties to the Player.
-     *
-     * @param player      The Player which should see the subtitle
-     * @param message     The message of the subtitle
-     * @param fadeIn      The amount of time this subtitle should fade in in ticks
-     * @param displayTime The amount of time this subtitle should stay fully visible in ticks
-     * @param fadeOut     The amount of time this subtitle should fade out in ticks
-     */
-    @Override
-    public void sendSubTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
-        IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\":\"" + message + "\"}"));
-        PacketPlayOutTitle packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, chatBaseComponent, fadeIn, displayTime, fadeOut);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutTitle);
-    }
-
-    /**
      * Sends a title with the provided properties to the Player.
      *
-     * @param player      The Player which should see the title
-     * @param message     The message of the title
-     * @param fadeIn      The amount of time this title should fade in in ticks
+     * @param player The Player which should see the title
+     * @param title The upper message of the title
+     * @param subtitle The lower message of the title
+     * @param fadeIn The amount of time this title should fade in in ticks
      * @param displayTime The amount of time this title should stay fully visible in ticks
-     * @param fadeOut     The amount of time this title should fade out in ticks
+     * @param fadeOut The amount of time this title should fade out in ticks
      */
     @Override
-    public void sendTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
-        IChatBaseComponent chatBaseComponent = IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\":\"" + message + "\"}"));
-        PacketPlayOutTitle packetPlayOutTitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, chatBaseComponent, fadeIn, displayTime, fadeOut);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutTitle);
+    public void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut) {
+        player.sendTitle(
+            ChatColor.translateAlternateColorCodes('&', title),
+            ChatColor.translateAlternateColorCodes('&', subtitle),
+            fadeIn,
+            displayTime,
+            fadeOut
+        );
     }
 
     @Override
