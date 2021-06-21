@@ -5,6 +5,8 @@ import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTListCompound;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -56,20 +58,10 @@ public class ItemStackUtils {
         try {
             ItemStack itemstack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
             if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-                NBTItem nbtItem = new NBTItem(itemstack);
-                NBTCompound skull = nbtItem.addCompound("SkullOwner");
-                if (supports) {
-                    skull.setUUID("Id", UUID.randomUUID());
-                } else {
-                    skull.setString("Id", UUID.randomUUID().toString());
-                }
-                NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
-                texture.setString("Value", item.headData);
-                return nbtItem.getItem();
+                return setHeadData(item.headData, itemstack);
             } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-                SkullMeta m = (SkullMeta) itemstack.getItemMeta();
-                m.setOwner(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
-                itemstack.setItemMeta(m);
+                OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
+                return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemstack);
             }
             return itemstack;
         } catch (Exception e) {
@@ -87,20 +79,10 @@ public class ItemStackUtils {
         try {
             ItemStack itemstack = makeItem(item.material, item.amount, item.displayName, item.lore);
             if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-                NBTItem nbtItem = new NBTItem(itemstack);
-                NBTCompound skull = nbtItem.addCompound("SkullOwner");
-                if (supports) {
-                    skull.setUUID("Id", UUID.randomUUID());
-                } else {
-                    skull.setString("Id", UUID.randomUUID().toString());
-                }
-                NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
-                texture.setString("Value", item.headData);
-                return nbtItem.getItem();
+                return setHeadData(item.headData, itemstack);
             } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-                SkullMeta m = (SkullMeta) itemstack.getItemMeta();
-                m.setOwner(item.headOwner);
-                itemstack.setItemMeta(m);
+                OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(item.headOwner);
+                return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemstack);
             }
             return itemstack;
         } catch (Exception e) {
@@ -144,6 +126,19 @@ public class ItemStackUtils {
         } catch (Exception e) {
             return XMaterial.AIR.parseItem();
         }
+    }
+
+    private static ItemStack setHeadData(String headData, ItemStack itemStack) {
+        NBTItem nbtItem = new NBTItem(itemStack);
+        NBTCompound skull = nbtItem.addCompound("SkullOwner");
+        if (supports) {
+            skull.setUUID("Id", UUID.randomUUID());
+        } else {
+            skull.setString("Id", UUID.randomUUID().toString());
+        }
+        NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
+        texture.setString("Value", headData);
+        return nbtItem.getItem();
     }
 
 }
