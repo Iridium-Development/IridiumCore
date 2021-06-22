@@ -15,25 +15,43 @@ import java.util.UUID;
 public class SkinUtils {
 
     private static final HashMap<UUID, String> cache = new HashMap<>();
+    private static final HashMap<String, UUID> uuidCache = new HashMap<>();
     private static final Gson gson = new Gson();
+
+    public static UUID getUUID(String username) {
+        try {
+            if (uuidCache.containsKey(username.toLowerCase())) return uuidCache.get(username.toLowerCase());
+
+            String signature = getURLContent(
+                    "https://api.mojang.com/users/profiles/minecraft/" + username);
+            JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
+            String value = profileJsonObject.get("id").getAsString();
+            if (value == null) return null;
+            return uuidCache.put(username.toLowerCase(),
+                    UUID.fromString(value.replaceFirst(
+                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                            "$1-$2-$3-$4-$5"
+                    )));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public static String getHeadData(UUID uuid) {
         try {
-            if (cache.containsKey(uuid)) {
-                return cache.get(uuid);
-            } else {
-                String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
-                JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
-                String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
-                String decoded = new String(Base64.getDecoder().decode(value));
+            if (cache.containsKey(uuid)) return cache.get(uuid);
 
-                JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
-                String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
-                byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
-                String data = new String(Base64.getEncoder().encode(skinByte));
-                cache.put(uuid, data);
-                return data;
-            }
+            String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
+            JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
+            String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
+            String decoded = new String(Base64.getDecoder().decode(value));
+
+            JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
+            String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+            byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
+            String data = new String(Base64.getEncoder().encode(skinByte));
+            return cache.put(uuid, data);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
