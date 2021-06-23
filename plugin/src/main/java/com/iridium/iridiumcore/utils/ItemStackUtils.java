@@ -9,13 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -82,7 +80,17 @@ public class ItemStackUtils {
                 return setHeadData(item.headData, itemstack);
             } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
                 OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(item.headOwner);
-                return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemstack);
+                if (!offlinePlayer.hasPlayedBefore()) {
+                    UUID uuid = SkinUtils.getUUID(item.headOwner);
+                    if (uuid == null)
+                        return setHeadData(
+                                "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==",
+                                itemstack
+                        );
+                    return setHeadData(SkinUtils.getHeadData(uuid), itemstack);
+                } else {
+                    return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemstack);
+                }
             }
             return itemstack;
         } catch (Exception e) {
