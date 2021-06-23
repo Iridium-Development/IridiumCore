@@ -79,18 +79,18 @@ public class ItemStackUtils {
             if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
                 return setHeadData(item.headData, itemstack);
             } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-                UUID uuid;
-                //OfflinePlayer will return a random uuid if the player doesn't exist in server cache
                 OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(item.headOwner);
-                if (offlinePlayer.hasPlayedBefore()) {
-                    uuid = offlinePlayer.getUniqueId();
+                if (!offlinePlayer.hasPlayedBefore()) {
+                    UUID uuid = SkinUtils.getUUID(item.headOwner);
+                    if (uuid == null)
+                        return setHeadData(
+                                "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==",
+                                itemstack
+                        );
+                    return setHeadData(SkinUtils.getHeadData(uuid), itemstack);
                 } else {
-                    if ((uuid = SkinUtils.getUUID(item.headOwner)) == null) {
-                        //steve
-                        return setHeadData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==", itemstack);
-                    }
+                    return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemstack);
                 }
-                return setHeadData(SkinUtils.getHeadData(uuid), itemstack);
             }
             return itemstack;
         } catch (Exception e) {
