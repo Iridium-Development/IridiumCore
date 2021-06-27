@@ -35,14 +35,14 @@ public class ItemStackUtils {
      * @return The new ItemStack
      */
     public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore) {
-        ItemStack item = material.parseItem();
-        if (item == null) return null;
-        item.setAmount(amount);
-        ItemMeta m = item.getItemMeta();
-        m.setLore(StringUtils.color(lore));
-        m.setDisplayName(StringUtils.color(name));
-        item.setItemMeta(m);
-        return item;
+        ItemStack itemStack = material.parseItem();
+        if (itemStack == null) return null;
+        itemStack.setAmount(amount);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setLore(StringUtils.color(lore));
+        itemMeta.setDisplayName(StringUtils.color(name));
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
     /**
@@ -54,15 +54,15 @@ public class ItemStackUtils {
      */
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         try {
-            ItemStack itemstack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
+            ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
             if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-                return setHeadData(item.headData, itemstack);
+                return setHeadData(item.headData, itemStack);
             } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
                 OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
-                return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemstack);
+                return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemStack);
             }
-            return itemstack;
-        } catch (Exception e) {
+            return itemStack;
+        } catch (Exception exception) {
             return makeItem(XMaterial.STONE, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
         }
     }
@@ -75,9 +75,9 @@ public class ItemStackUtils {
      */
     public static ItemStack makeItem(Item item) {
         try {
-            ItemStack itemstack = makeItem(item.material, item.amount, item.displayName, item.lore);
+            ItemStack itemStack = makeItem(item.material, item.amount, item.displayName, item.lore);
             if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-                return setHeadData(item.headData, itemstack);
+                return setHeadData(item.headData, itemStack);
             } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
                 OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(item.headOwner);
                 if (!offlinePlayer.hasPlayedBefore()) {
@@ -85,15 +85,15 @@ public class ItemStackUtils {
                     if (uuid == null)
                         return setHeadData(
                                 "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==",
-                                itemstack
+                                itemStack
                         );
-                    return setHeadData(SkinUtils.getHeadData(uuid), itemstack);
+                    return setHeadData(SkinUtils.getHeadData(uuid), itemStack);
                 } else {
-                    return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemstack);
+                    return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemStack);
                 }
             }
-            return itemstack;
-        } catch (Exception e) {
+            return itemStack;
+        } catch (Exception exception) {
             // Create a fallback item
             return makeItem(XMaterial.STONE, item.amount, item.displayName, item.lore);
         }
@@ -131,12 +131,21 @@ public class ItemStackUtils {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.getDecoder().decode(string));
             BukkitObjectInputStream bukkitObjectInputStream = new BukkitObjectInputStream(byteArrayInputStream);
             return (ItemStack) bukkitObjectInputStream.readObject();
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return XMaterial.AIR.parseItem();
         }
     }
 
+    /**
+     * Applies the provided head data to the provided ItemStack and returns it.
+     *
+     * @param headData  The head data which should be applied
+     * @param itemStack The ItemStack which should have the head data
+     * @return          A new ItemStack which is similar to the provided one but has the head data
+     */
     private static ItemStack setHeadData(String headData, ItemStack itemStack) {
+        if (headData == null) return itemStack;
+
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");
         if (supports) {
@@ -144,6 +153,7 @@ public class ItemStackUtils {
         } else {
             skull.setString("Id", UUID.randomUUID().toString());
         }
+
         NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
         texture.setString("Value", headData);
         return nbtItem.getItem();
