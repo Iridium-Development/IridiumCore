@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
@@ -22,8 +23,9 @@ public class SkinUtils {
         try {
             if (uuidCache.containsKey(username.toLowerCase())) return uuidCache.get(username.toLowerCase());
 
-            String signature = getURLContent(
-                    "https://api.mojang.com/users/profiles/minecraft/" + username);
+            String signature = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + username);
+            if (signature.isEmpty()) return null;
+
             JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
             String value = profileJsonObject.get("id").getAsString();
             if (value == null) return null;
@@ -32,8 +34,11 @@ public class SkinUtils {
                             "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
                             "$1-$2-$3-$4-$5"
                     )));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (UnknownHostException exception) {
+            // Don't print the exception to ignore API errors
+            return null;
+        } catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }
@@ -43,6 +48,8 @@ public class SkinUtils {
             if (cache.containsKey(uuid)) return cache.get(uuid);
 
             String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
+            if (signature.isEmpty()) return null;
+
             JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
             String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
             String decoded = new String(Base64.getDecoder().decode(value));
@@ -52,22 +59,25 @@ public class SkinUtils {
             byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
             String data = new String(Base64.getEncoder().encode(skinByte));
             return cache.put(uuid, data);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (UnknownHostException exception) {
+            // Don't print the exception to ignore session server errors
+            return null;
+        } catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }
 
-    private static String getURLContent(String urlStr) {
-        StringBuilder sb = new StringBuilder();
+    private static String getURLContent(String urlStr) throws UnknownHostException {
+        StringBuilder stringBuilder = new StringBuilder();
         BufferedReader in = null;
         try {
             URL url = new URL(urlStr);
             in = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
             String str;
-            while ((str = in.readLine()) != null) sb.append(str);
-        } catch (Exception e) {
-            e.printStackTrace();
+            while ((str = in.readLine()) != null) stringBuilder.append(str);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         } finally {
             try {
                 if (in != null) in.close();
@@ -75,6 +85,6 @@ public class SkinUtils {
                 e.printStackTrace();
             }
         }
-        return sb.toString();
+        return stringBuilder.toString();
     }
 }
