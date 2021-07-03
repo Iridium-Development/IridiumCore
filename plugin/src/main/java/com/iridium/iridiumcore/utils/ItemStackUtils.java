@@ -15,6 +15,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,18 +54,15 @@ public class ItemStackUtils {
      * @return The new ItemStack
      */
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
-        try {
-            ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
-            if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-                return setHeadData(item.headData, itemStack);
-            } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-                OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
-                return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemStack);
-            }
-            return itemStack;
-        } catch (Exception exception) {
-            return makeItem(XMaterial.STONE, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
+        ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
+        if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
+            itemStack = setHeadData(item.headData, itemStack);
+        } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
+            UUID uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
+            itemStack = setHeadData(SkinUtils.getHeadData(uuid), itemStack);
         }
+
+        return itemStack;
     }
 
     /**
@@ -74,29 +72,7 @@ public class ItemStackUtils {
      * @return The new ItemStack
      */
     public static ItemStack makeItem(Item item) {
-        try {
-            ItemStack itemStack = makeItem(item.material, item.amount, item.displayName, item.lore);
-            if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-                return setHeadData(item.headData, itemStack);
-            } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-                OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(item.headOwner);
-                if (!offlinePlayer.hasPlayedBefore()) {
-                    UUID uuid = SkinUtils.getUUID(item.headOwner);
-                    if (uuid == null)
-                        return setHeadData(
-                                "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==",
-                                itemStack
-                        );
-                    return setHeadData(SkinUtils.getHeadData(uuid), itemStack);
-                } else {
-                    return setHeadData(SkinUtils.getHeadData(offlinePlayer.getUniqueId()), itemStack);
-                }
-            }
-            return itemStack;
-        } catch (Exception exception) {
-            // Create a fallback item
-            return makeItem(XMaterial.STONE, item.amount, item.displayName, item.lore);
-        }
+        return makeItem(item, Collections.emptyList());
     }
 
     /**
@@ -141,7 +117,7 @@ public class ItemStackUtils {
      *
      * @param headData  The head data which should be applied
      * @param itemStack The ItemStack which should have the head data
-     * @return          A new ItemStack which is similar to the provided one but has the head data
+     * @return A new ItemStack which is similar to the provided one but has the head data
      */
     private static ItemStack setHeadData(String headData, ItemStack itemStack) {
         if (headData == null) return itemStack;
