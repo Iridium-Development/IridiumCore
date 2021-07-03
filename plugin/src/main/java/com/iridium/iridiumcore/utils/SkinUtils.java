@@ -52,17 +52,19 @@ public class SkinUtils {
                 if (signature.isEmpty()) {
                     cache.put(uuid, steveSkin);
                 } else {
-
                     JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
-                    if (!profileJsonObject.has("properties")) return steveSkin;
-                    String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
-                    String decoded = new String(Base64.getDecoder().decode(value));
+                    if (!profileJsonObject.has("properties")) {
+                        cache.put(uuid, steveSkin);
+                    } else {
+                        String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
+                        String decoded = new String(Base64.getDecoder().decode(value));
 
-                    JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
-                    String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
-                    byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
-                    String data = new String(Base64.getEncoder().encode(skinByte));
-                    cache.put(uuid, data);
+                        JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
+                        String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+                        byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
+                        String data = new String(Base64.getEncoder().encode(skinByte));
+                        cache.put(uuid, data);
+                    }
                 }
             } catch (UnknownHostException exception) {
                 return steveSkin;
