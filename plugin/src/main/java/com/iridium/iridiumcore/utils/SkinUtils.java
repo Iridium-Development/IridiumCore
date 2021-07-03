@@ -2,6 +2,7 @@ package com.iridium.iridiumcore.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.iridium.iridiumcore.IridiumCore;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,53 +20,55 @@ public class SkinUtils {
     private static final HashMap<String, UUID> uuidCache = new HashMap<>();
     private static final Gson gson = new Gson();
 
+    private static final String steveSkin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==";
+
     public static UUID getUUID(String username) {
-        try {
-            if (uuidCache.containsKey(username.toLowerCase())) return uuidCache.get(username.toLowerCase());
-
-            String signature = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + username);
-            if (signature.isEmpty()) return null;
-
-            JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
-            String value = profileJsonObject.get("id").getAsString();
-            if (value == null) return null;
-            return uuidCache.put(username.toLowerCase(),
-                    UUID.fromString(value.replaceFirst(
-                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-                            "$1-$2-$3-$4-$5"
-                    )));
-        } catch (UnknownHostException exception) {
-            // Don't print the exception to ignore API errors
-            return null;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
+        if (!uuidCache.containsKey(username.toLowerCase())) {
+            try {
+                String signature = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + username);
+                if (signature.isEmpty()) {
+                    System.out.println(username);
+                    return UUID.randomUUID();
+                }
+                JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
+                String value = profileJsonObject.get("id").getAsString();
+                if (value == null) return UUID.randomUUID();
+                uuidCache.put(username.toLowerCase(),
+                        UUID.fromString(value.replaceFirst(
+                                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                                "$1-$2-$3-$4-$5"
+                        )));
+            } catch (UnknownHostException exception) {
+                return UUID.randomUUID();
+            }
         }
+        return uuidCache.get(username.toLowerCase());
     }
 
     public static String getHeadData(UUID uuid) {
-        try {
-            if (cache.containsKey(uuid)) return cache.get(uuid);
+        if (!cache.containsKey(uuid)) {
+            try {
+                String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
+                if (signature.isEmpty()) {
+                    System.out.println(uuid);
+                    return steveSkin;
+                }
 
-            String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
-            if (signature.isEmpty()) return null;
+                JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
+                if (!profileJsonObject.has("properties")) return steveSkin;
+                String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
+                String decoded = new String(Base64.getDecoder().decode(value));
 
-            JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
-            String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
-            String decoded = new String(Base64.getDecoder().decode(value));
-
-            JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
-            String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
-            byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
-            String data = new String(Base64.getEncoder().encode(skinByte));
-            return cache.put(uuid, data);
-        } catch (UnknownHostException exception) {
-            // Don't print the exception to ignore session server errors
-            return null;
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
+                JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
+                String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+                byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
+                String data = new String(Base64.getEncoder().encode(skinByte));
+                cache.put(uuid, data);
+            } catch (UnknownHostException exception) {
+                return steveSkin;
+            }
         }
+        return cache.get(uuid);
     }
 
     private static String getURLContent(String urlStr) throws UnknownHostException {
