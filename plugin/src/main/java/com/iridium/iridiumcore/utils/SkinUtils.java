@@ -3,6 +3,7 @@ package com.iridium.iridiumcore.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.iridium.iridiumcore.IridiumCore;
+import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class SkinUtils {
 
@@ -23,52 +25,51 @@ public class SkinUtils {
     private static final String steveSkin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==";
 
     public static UUID getUUID(String username) {
-        if (!uuidCache.containsKey(username.toLowerCase())) {
-            try {
-                String signature = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + username);
-                if (signature.isEmpty()) {
-                    uuidCache.put(username.toLowerCase(), UUID.randomUUID());
-                } else {
-                    JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
-                    String value = profileJsonObject.get("id").getAsString();
-                    if (value == null) return UUID.randomUUID();
-                    uuidCache.put(username.toLowerCase(),
-                            UUID.fromString(value.replaceFirst(
-                                    "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-                                    "$1-$2-$3-$4-$5"
-                            )));
+        if (!uuidCache.containsKey(username)) {
+            uuidCache.put(username, UUID.randomUUID());
+            CompletableFuture.runAsync(() -> {
+                try {
+                    String signature = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + username);
+                    if (!signature.isEmpty()) {
+                        JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
+                        String value = profileJsonObject.get("id").getAsString();
+                        if (value != null) {
+                            uuidCache.put(username,
+                                    UUID.fromString(value.replaceFirst(
+                                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                                            "$1-$2-$3-$4-$5"
+                                    )));
+                        }
+                    }
+                } catch (UnknownHostException ignored) {
                 }
-            } catch (UnknownHostException exception) {
-                return UUID.randomUUID();
-            }
+            });
         }
-        return uuidCache.get(username.toLowerCase());
+        return uuidCache.get(username);
     }
 
     public static String getHeadData(UUID uuid) {
         if (!cache.containsKey(uuid)) {
-            try {
-                String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
-                if (signature.isEmpty()) {
-                    cache.put(uuid, steveSkin);
-                } else {
-                    JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
-                    if (!profileJsonObject.has("properties")) {
-                        cache.put(uuid, steveSkin);
-                    } else {
-                        String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
-                        String decoded = new String(Base64.getDecoder().decode(value));
+            cache.put(uuid, steveSkin);
+            CompletableFuture.runAsync(() -> {
+                try {
+                    String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
+                    if (!signature.isEmpty()) {
+                        JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
+                        if (profileJsonObject.has("properties")) {
+                            String value = profileJsonObject.getAsJsonArray("properties").get(0).getAsJsonObject().get("value").getAsString();
+                            String decoded = new String(Base64.getDecoder().decode(value));
 
-                        JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
-                        String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
-                        byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
-                        String data = new String(Base64.getEncoder().encode(skinByte));
-                        cache.put(uuid, data);
+                            JsonObject textureJsonObject = gson.fromJson(decoded, JsonObject.class);
+                            String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+                            byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
+                            String data = new String(Base64.getEncoder().encode(skinByte));
+                            cache.put(uuid, data);
+                        }
                     }
+                } catch (UnknownHostException ignored) {
                 }
-            } catch (UnknownHostException exception) {
-                return steveSkin;
-            }
+            });
         }
         return cache.get(uuid);
     }
