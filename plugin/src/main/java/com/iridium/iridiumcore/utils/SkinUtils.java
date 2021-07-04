@@ -22,11 +22,13 @@ public class SkinUtils {
     private static final HashMap<String, UUID> uuidCache = new HashMap<>();
     private static final Gson gson = new Gson();
 
+    private static final UUID loadingUUID = UUID.randomUUID();
+
     private static final String steveSkin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==";
 
     public static UUID getUUID(String username) {
         if (!uuidCache.containsKey(username)) {
-            uuidCache.put(username, UUID.randomUUID());
+            uuidCache.put(username, loadingUUID);
             CompletableFuture.runAsync(() -> {
                 try {
                     String signature = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + username);
@@ -49,6 +51,7 @@ public class SkinUtils {
     }
 
     public static String getHeadData(UUID uuid) {
+        if (uuid.equals(loadingUUID)) return steveSkin;
         if (!cache.containsKey(uuid)) {
             cache.put(uuid, steveSkin);
             CompletableFuture.runAsync(() -> {
