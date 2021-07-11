@@ -16,4 +16,9 @@ public class Background {
         this.items = items;
     }
 
+    public Background(Map<Integer, Item> items, Item filler) {
+        this.items = items;
+        this.filler = filler;
+    }
+
 }
