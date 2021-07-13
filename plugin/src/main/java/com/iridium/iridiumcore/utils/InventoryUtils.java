@@ -5,6 +5,8 @@ import com.iridium.iridiumcore.Background;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 /**
  * Various utils which perform operations on {@link Inventory}'s.
  */
@@ -87,6 +89,22 @@ public class InventoryUtils {
         for (int slot : background.items.keySet()) {
             if (slot >= inventory.getSize()) continue;
             inventory.setItem(slot, ItemStackUtils.makeItem(background.items.get(slot)));
+        }
+    }
+
+    /**
+     * Fills the provided Inventory with the filler material (black stained glass panes by default).
+     * Replaces existing items.
+     *
+     * @param inventory The inventory which should be filled
+     */
+    public static void fillInventory(Inventory inventory, Background background, List<Placeholder> placeholders) {
+        for (int i = 0; i < inventory.getSize(); i++) {
+            inventory.setItem(i, ItemStackUtils.makeItem(background.filler, placeholders));
+        }
+        for (int slot : background.items.keySet()) {
+            if (slot >= inventory.getSize()) continue;
+            inventory.setItem(slot, ItemStackUtils.makeItem(background.items.get(slot), placeholders));
         }
     }
 
