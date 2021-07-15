@@ -32,7 +32,7 @@ allprojects {
     dependencies {
         // Dependencies that we want to shade in
         implementation("org.jetbrains:annotations:16.0.1")
-        implementation("com.github.cryptomorin:XSeries:8.1.0")
+        implementation("com.github.cryptomorin:XSeries:8.2.0")
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.projectlombok:lombok:1.18.20")
