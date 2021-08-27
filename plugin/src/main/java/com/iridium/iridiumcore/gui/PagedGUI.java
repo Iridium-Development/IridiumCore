@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public abstract class PagedGUI<T> implements GUI {
         }
     }
 
-    public abstract List<T> getPageObjects();
+    public abstract Collection<T> getPageObjects();
 
     public abstract ItemStack getItemStack(T t);
 }
