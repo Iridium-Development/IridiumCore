@@ -1,5 +1,6 @@
 package com.iridium.iridiumcore;
 
+import com.iridium.iridiumcore.gui.GUI;
 import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
 import io.papermc.lib.PaperLib;
