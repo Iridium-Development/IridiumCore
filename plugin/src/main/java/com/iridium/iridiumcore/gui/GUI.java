@@ -1,4 +1,4 @@
-package com.iridium.iridiumcore;
+package com.iridium.iridiumcore.gui;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
