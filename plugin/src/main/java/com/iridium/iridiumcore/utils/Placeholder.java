@@ -1,7 +1,6 @@
 package com.iridium.iridiumcore.utils;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * Represents a placeholder used in configuration files.
@@ -9,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Placeholder {
 
-    private String key;
-    private String value;
+    private final String key;
+    private final String value;
 
     /**
      * The default constructor.
@@ -30,7 +29,7 @@ public class Placeholder {
      * @return The processed line with this placeholder replaced, empty if the parameter is null
      */
     public String process(String line) {
-        if (line == null) return "";
+        if (line == null || line.isEmpty()) return "";
         return line.replace(key, value);
     }
 
