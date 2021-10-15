@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.3.2"
+version = "1.3.3"
 description = "IridiumCore"
 
 allprojects {
@@ -24,15 +24,15 @@ allprojects {
         maven("https://ci.ender.zone/plugin/repository/everything/")
         maven("https://jitpack.io")
         maven("https://repo.rosewooddev.io/repository/public/")
-        maven("https://nexus.savagelabs.net/repository/maven-releases/")
+        maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://repo.jeff-media.de/maven2/")
     }
 
     dependencies {
         // Dependencies that we want to shade in
-        implementation("org.jetbrains:annotations:16.0.1")
-        implementation("com.github.cryptomorin:XSeries:8.3.0")
+        implementation("org.jetbrains:annotations:22.0.0")
+        implementation("com.github.cryptomorin:XSeries:8.4.0")
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.projectlombok:lombok:1.18.20")
