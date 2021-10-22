@@ -8,7 +8,11 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
+
+import java.io.File;
 
 /**
  * The main class of this plugin which handles initialization
@@ -20,6 +24,12 @@ public class IridiumCore extends JavaPlugin {
     private Persist persist;
     private NMS nms;
     private MultiVersion multiVersion;
+
+
+    public IridiumCore(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
+    {
+        super(loader, description, dataFolder, file);
+    }
 
     /**
      * Code that should be executed before this plugin gets enabled.
