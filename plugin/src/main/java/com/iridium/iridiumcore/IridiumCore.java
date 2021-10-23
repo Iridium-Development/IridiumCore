@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
+import java.util.logging.Filter;
 
 /**
  * The main class of this plugin which handles initialization
@@ -26,9 +27,14 @@ public class IridiumCore extends JavaPlugin {
     private MultiVersion multiVersion;
     private boolean isTesting = false;
 
+    /**
+     * Constructor used for UnitTests
+     */
     public IridiumCore(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
         this.isTesting = true;
+        // Disable logging
+        getLogger().setFilter(record -> false);
     }
 
     /**
@@ -84,6 +90,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        if (isTesting) return;
         saveData();
         Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
         getLogger().info("-------------------------------");
