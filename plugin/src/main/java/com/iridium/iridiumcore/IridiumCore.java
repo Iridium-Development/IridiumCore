@@ -24,11 +24,11 @@ public class IridiumCore extends JavaPlugin {
     private Persist persist;
     private NMS nms;
     private MultiVersion multiVersion;
+    private boolean isTesting = false;
 
-
-    public IridiumCore(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file)
-    {
+    public IridiumCore(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
+        this.isTesting = true;
     }
 
     /**
@@ -51,6 +51,10 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        if (isTesting) {
+            registerListeners();
+            return;
+        }
         setupMultiVersion();
 
         if (!PaperLib.isSpigot()) {
@@ -105,16 +109,20 @@ public class IridiumCore extends JavaPlugin {
      * Automatically gets the correct {@link MultiVersion} and {@link NMS} support from the Minecraft server version.
      */
     private void setupMultiVersion() {
-        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        MinecraftVersion minecraftVersion = MinecraftVersion.byName(version);
-        if (minecraftVersion == null) {
-            getLogger().warning("Un-Supported Minecraft Version: " + version);
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
+        try {
+            String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+            MinecraftVersion minecraftVersion = MinecraftVersion.byName(version);
+            if (minecraftVersion == null) {
+                getLogger().warning("Un-Supported Minecraft Version: " + version);
+                Bukkit.getPluginManager().disablePlugin(this);
+                return;
+            }
 
-        this.nms = minecraftVersion.getNms();
-        this.multiVersion = minecraftVersion.getMultiVersion(this);
+            this.nms = minecraftVersion.getNms();
+            this.multiVersion = minecraftVersion.getMultiVersion(this);
+        } catch (Exception exception) {
+            getLogger().warning("Un-Supported Minecraft Version");
+        }
     }
 
     /**
