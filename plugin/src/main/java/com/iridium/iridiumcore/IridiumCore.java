@@ -5,6 +5,7 @@ import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
 import io.papermc.lib.PaperLib;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
@@ -20,6 +21,7 @@ import java.util.logging.Filter;
  * and shutdown of the plugin.
  */
 @Getter
+@NoArgsConstructor
 public class IridiumCore extends JavaPlugin {
 
     private Persist persist;
