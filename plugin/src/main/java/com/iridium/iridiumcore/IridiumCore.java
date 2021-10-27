@@ -5,21 +5,39 @@ import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
 import io.papermc.lib.PaperLib;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
+
+import java.io.File;
+import java.util.logging.Filter;
 
 /**
  * The main class of this plugin which handles initialization
  * and shutdown of the plugin.
  */
 @Getter
+@NoArgsConstructor
 public class IridiumCore extends JavaPlugin {
 
     private Persist persist;
     private NMS nms;
     private MultiVersion multiVersion;
+    private boolean isTesting = false;
+
+    /**
+     * Constructor used for UnitTests
+     */
+    public IridiumCore(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
+        this.isTesting = true;
+        // Disable logging
+        getLogger().setFilter(record -> false);
+    }
 
     /**
      * Code that should be executed before this plugin gets enabled.
@@ -41,6 +59,10 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        if (isTesting) {
+            registerListeners();
+            return;
+        }
         setupMultiVersion();
 
         if (!PaperLib.isSpigot()) {
@@ -70,6 +92,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        if (isTesting) return;
         saveData();
         Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
         getLogger().info("-------------------------------");
@@ -95,16 +118,20 @@ public class IridiumCore extends JavaPlugin {
      * Automatically gets the correct {@link MultiVersion} and {@link NMS} support from the Minecraft server version.
      */
     private void setupMultiVersion() {
-        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        MinecraftVersion minecraftVersion = MinecraftVersion.byName(version);
-        if (minecraftVersion == null) {
-            getLogger().warning("Un-Supported Minecraft Version: " + version);
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
+        try {
+            String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+            MinecraftVersion minecraftVersion = MinecraftVersion.byName(version);
+            if (minecraftVersion == null) {
+                getLogger().warning("Un-Supported Minecraft Version: " + version);
+                Bukkit.getPluginManager().disablePlugin(this);
+                return;
+            }
 
-        this.nms = minecraftVersion.getNms();
-        this.multiVersion = minecraftVersion.getMultiVersion(this);
+            this.nms = minecraftVersion.getNms();
+            this.multiVersion = minecraftVersion.getMultiVersion(this);
+        } catch (Exception exception) {
+            getLogger().warning("Un-Supported Minecraft Version");
+        }
     }
 
     /**

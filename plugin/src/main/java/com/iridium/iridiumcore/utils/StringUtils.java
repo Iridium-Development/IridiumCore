@@ -1,6 +1,8 @@
 package com.iridium.iridiumcore.utils;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import com.iridium.iridiumcore.DefaultFontInfo;
+import org.bukkit.ChatColor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +11,8 @@ import java.util.stream.Collectors;
  * Various utils for modifying Strings.
  */
 public class StringUtils {
+
+    private final static int CENTER_PX = 154;
 
     /**
      * Applies colors to the provided string.
@@ -64,6 +68,41 @@ public class StringUtils {
             processedLine = placeholder.process(processedLine);
         }
         return color(processedLine);
+    }
+
+    public static String getCenteredMessage(String message, String buffer) {
+        if (message == null || message.equals("")) return "";
+        message = ChatColor.translateAlternateColorCodes('&', message);
+
+        int messagePxSize = 0;
+        boolean previousCode = false;
+        boolean isBold = false;
+
+        for (char c : message.toCharArray()) {
+            if (c == '§') {
+                previousCode = true;
+            } else if (previousCode) {
+                previousCode = false;
+                if (c == 'l' || c == 'L') {
+                    isBold = true;
+                } else isBold = false;
+            } else {
+                DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
+                messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
+                messagePxSize++;
+            }
+        }
+
+        int halvedMessageSize = messagePxSize / 2;
+        int toCompensate = CENTER_PX - halvedMessageSize;
+        int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+        int compensated = 0;
+        StringBuilder sb = new StringBuilder();
+        while (compensated < toCompensate) {
+            sb.append(buffer);
+            compensated += spaceLength;
+        }
+        return sb + message + sb;
     }
 
 }
