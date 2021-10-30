@@ -26,7 +26,7 @@ allprojects {
         maven("https://nexus.savagelabs.net/repository/maven-releases/")
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://repo.jeff-media.de/maven2/")
-	    maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
+        maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
     }
 
     dependencies {
