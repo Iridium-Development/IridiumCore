@@ -14,7 +14,6 @@ allprojects {
     java.sourceCompatibility = JavaVersion.VERSION_1_8
 
     repositories {
-        mavenLocal()
         mavenCentral()
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://repo.mvdw-software.com/content/groups/public/")
