@@ -53,13 +53,18 @@ tasks {
     }
 
     shadowJar {
+        fun relocate(origin: String) = relocate(origin, "com.iridium.iridiumcore.dependencies${origin.substring(origin.lastIndexOf('.'))}")
+
+        // Remove the archive classifier suffix
         archiveClassifier.set("")
-        relocate("de.tr7zw.changeme.nbtapi", "com.iridium.iridiumcore.dependencies.nbtapi")
-        relocate("com.iridium.iridiumcolorapi", "com.iridium.iridiumcore.dependencies.iridiumcolorapi")
-        relocate("org.yaml.snakeyaml", "com.iridium.iridiumcore.dependencies.snakeyaml")
+
+        // Relocate dependencies
         relocate("io.papermc.lib", "com.iridium.iridiumcore.dependencies.paperlib")
-        relocate("com.cryptomorin.xseries", "com.iridium.iridiumcore.dependencies.xseries")
-        relocate("com.fasterxml.jackson", "com.iridium.iridiumcore.dependencies.fasterxml")
+        relocate("com.cryptomorin.xseries")
+        relocate("com.iridium.iridiumcolorapi")
+        relocate("de.tr7zw.changeme.nbtapi")
+        relocate("com.fasterxml.jackson")
+        relocate("org.yaml.snakeyaml")
     }
 
     compileJava {
