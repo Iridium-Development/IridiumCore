@@ -14,13 +14,16 @@ public class NumberFormatter {
     public String thousandAbbreviation = "K";
     public String millionAbbreviation = "M";
     public String billionAbbreviation = "B";
+    public String trillionAbbreviation = "T";
     public boolean displayNumberAbbreviations = true;
     @JsonIgnore
-    private final BigDecimal ONE_THOUSAND = new BigDecimal(1000);
+    private final BigDecimal ONE_THOUSAND = new BigDecimal(1_000L);
     @JsonIgnore
-    private final BigDecimal ONE_MILLION = new BigDecimal(1000000);
+    private final BigDecimal ONE_MILLION = new BigDecimal(1_000_000L);
     @JsonIgnore
-    private final BigDecimal ONE_BILLION = new BigDecimal(1000000000);
+    private final BigDecimal ONE_BILLION = new BigDecimal(1_000_000_000L);
+    @JsonIgnore
+    private final BigDecimal ONE_TRILLION = new BigDecimal(1_000_000_000_000L);
 
     /**
      * Formats a provided number as configured by the user.
@@ -33,7 +36,7 @@ public class NumberFormatter {
         if (displayNumberAbbreviations) {
             return formatNumber(BigDecimal.valueOf(number));
         } else {
-            return String.format("%.2f", number);
+            return String.format("%." + numberAbbreviationDecimalPlaces + "f", number);
         }
     }
 
@@ -63,10 +66,14 @@ public class NumberFormatter {
             outputStringBuilder
                     .append(bigDecimal.divide(ONE_MILLION, RoundingMode.HALF_DOWN).stripTrailingZeros().toPlainString())
                     .append(millionAbbreviation);
-        } else {
+        } else if (bigDecimal.compareTo(ONE_TRILLION) < 0) {
             outputStringBuilder
                     .append(bigDecimal.divide(ONE_BILLION, RoundingMode.HALF_DOWN).stripTrailingZeros().toPlainString())
                     .append(billionAbbreviation);
+        } else {
+            outputStringBuilder
+                    .append(bigDecimal.divide(ONE_TRILLION, RoundingMode.HALF_DOWN).stripTrailingZeros().toPlainString())
+                    .append(trillionAbbreviation);
         }
 
         return outputStringBuilder.toString();
