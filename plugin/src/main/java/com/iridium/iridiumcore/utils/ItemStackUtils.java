@@ -7,6 +7,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTListCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -40,6 +41,7 @@ public class ItemStackUtils {
         if (itemStack == null) return null;
         itemStack.setAmount(amount);
         ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         itemMeta.setLore(StringUtils.color(lore));
         itemMeta.setDisplayName(StringUtils.color(name));
         itemStack.setItemMeta(itemMeta);

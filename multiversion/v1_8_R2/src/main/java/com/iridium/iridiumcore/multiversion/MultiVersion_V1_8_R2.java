@@ -42,5 +42,4 @@ public class MultiVersion_V1_8_R2 extends MultiVersion {
         Bukkit.getScheduler().runTask(javaPlugin, () -> completableFuture.complete(world.getChunkAt(x, z)));
         return completableFuture;
     }
-
 }

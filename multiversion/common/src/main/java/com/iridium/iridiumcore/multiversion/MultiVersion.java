@@ -56,8 +56,12 @@ public abstract class MultiVersion {
      * @param location The location of the chunk
      * @return The chunk
      */
-    public CompletableFuture<Chunk> getChunkAt(Location location){
+    public CompletableFuture<Chunk> getChunkAt(Location location) {
         return getChunkAt(location.getWorld(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
+    }
+
+    public void loadLegacy() {
+
     }
 
 }
