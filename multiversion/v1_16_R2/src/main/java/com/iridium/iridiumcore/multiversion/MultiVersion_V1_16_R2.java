@@ -20,7 +20,6 @@ public class MultiVersion_V1_16_R2 extends MultiVersion {
     @SuppressWarnings("deprecation")
     public MultiVersion_V1_16_R2(JavaPlugin javaPlugin) {
         super(javaPlugin);
-        CraftLegacy.init();
     }
 
     /**
@@ -45,5 +44,10 @@ public class MultiVersion_V1_16_R2 extends MultiVersion {
     @Override
     public CompletableFuture<Chunk> getChunkAt(World world, int x, int z) {
         return PaperLib.getChunkAtAsync(world, x, z, true);
+    }
+
+    @Override
+    public void loadLegacy() {
+        CraftLegacy.init();
     }
 }

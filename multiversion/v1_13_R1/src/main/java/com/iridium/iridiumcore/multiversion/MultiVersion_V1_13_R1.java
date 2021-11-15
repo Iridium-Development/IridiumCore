@@ -17,7 +17,6 @@ public class MultiVersion_V1_13_R1 extends MultiVersion {
     @SuppressWarnings("deprecation")
     public MultiVersion_V1_13_R1(JavaPlugin javaPlugin) {
         super(javaPlugin);
-        new CraftLegacy();
     }
 
     /**
@@ -44,4 +43,8 @@ public class MultiVersion_V1_13_R1 extends MultiVersion {
         return PaperLib.getChunkAtAsync(world, x, z, true);
     }
 
+    @Override
+    public void loadLegacy() {
+        new CraftLegacy();
+    }
 }
