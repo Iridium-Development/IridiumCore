@@ -1,14 +1,14 @@
 dependencies {
     // Dependencies that we want to shade in
     implementation("de.tr7zw:item-nbt-api:2.8.0")
-    implementation("com.iridium:IridiumColorAPI:1.0.5")
-    implementation("org.jetbrains:annotations:16.0.1")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.12.3")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.3")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3")
-    implementation("org.yaml:snakeyaml:1.27")
+    implementation("com.iridium:IridiumColorAPI:1.0.6")
+    implementation("org.jetbrains:annotations:22.0.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.13.0")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.13.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0")
+    implementation("org.yaml:snakeyaml:1.29")
     implementation("io.papermc:paperlib:1.0.6")
 
     // Other dependencies that are not required or already available at runtime
