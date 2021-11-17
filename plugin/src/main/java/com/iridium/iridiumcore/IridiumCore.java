@@ -12,6 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.logging.Filter;
@@ -28,6 +29,7 @@ public class IridiumCore extends JavaPlugin {
     private NMS nms;
     private MultiVersion multiVersion;
     private boolean isTesting = false;
+    private BukkitTask saveTask;
 
     /**
      * Constructor used for UnitTests
@@ -73,7 +75,7 @@ public class IridiumCore extends JavaPlugin {
         }
 
         // Save data regularly
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveData, 0, 20 * 60 * 5);
+        saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveData, 0, 20 * 60 * 5);
 
         // Register plugin listeners
         registerListeners();
@@ -93,6 +95,7 @@ public class IridiumCore extends JavaPlugin {
     @Override
     public void onDisable() {
         if (isTesting) return;
+        saveTask.cancel();
         saveData();
         Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
         getLogger().info("-------------------------------");
