@@ -41,10 +41,12 @@ public class ItemStackUtils {
         if (itemStack == null) return null;
         itemStack.setAmount(amount);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        itemMeta.setLore(StringUtils.color(lore));
-        itemMeta.setDisplayName(StringUtils.color(name));
-        itemStack.setItemMeta(itemMeta);
+        if (itemMeta != null) {
+            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            itemMeta.setLore(StringUtils.color(lore));
+            itemMeta.setDisplayName(StringUtils.color(name));
+            itemStack.setItemMeta(itemMeta);
+        }
         return itemStack;
     }
 
