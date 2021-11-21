@@ -36,7 +36,7 @@ public class ItemStackUtils {
      * @param lore     The lore of this item
      * @return The new ItemStack
      */
-    public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore) {
+    public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore, Integer model) {
         ItemStack itemStack = material.parseItem();
         if (itemStack == null) return null;
         itemStack.setAmount(amount);
@@ -45,7 +45,7 @@ public class ItemStackUtils {
         itemMeta.setLore(StringUtils.color(lore));
         itemMeta.setDisplayName(StringUtils.color(name));
         itemStack.setItemMeta(itemMeta);
-        return itemStack;
+        return setModel(model, itemStack);
     }
 
     /**
@@ -56,7 +56,7 @@ public class ItemStackUtils {
      * @return The new ItemStack
      */
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
-        ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
+        ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders), item.model);
         if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
             itemStack = setHeadData(item.headData, itemStack);
         } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
@@ -135,6 +135,21 @@ public class ItemStackUtils {
         NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
         texture.setString("Value", headData);
         return nbtItem.getItem();
+    }
+
+    /**
+     * Applies the provided model data to the provided ItemStack and returns it.
+     *
+     * @param model  The model data which should be applied
+     * @param itemStack The ItemStack which should have the model data
+     * @return A new ItemStack which is similar to the provided one but has the model data
+     */
+    public static ItemStack setModel(Integer model, ItemStack itemStack){
+        if(model == null) return itemStack;
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setCustomModelData(model);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
 }

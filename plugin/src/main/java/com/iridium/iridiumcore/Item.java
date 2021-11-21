@@ -20,6 +20,7 @@ public class Item {
     public String headOwner;
     public List<String> lore;
     public Integer slot;
+    public Integer model;
 
     /**
      * Creates a new item with the provided data.
@@ -91,6 +92,27 @@ public class Item {
         this.displayName = displayName;
         this.headOwner = headOwner;
         this.slot = slot;
+    }
+
+    /**
+     * Creates a new item with the provided data.
+     * Used for creating player heads.
+     *
+     * @param material    The material of the item. Specifies the type
+     * @param slot        The slot where this item should be in
+     * @param amount      The amount of this item. Should not be higher than the max stack size
+     * @param displayName The display name of the item with color codes
+     * @param headOwner   The owner of the head
+     * @param lore        The lore of the item, can be empty
+     */
+    public Item(XMaterial material, int slot, int amount, String displayName, String headOwner, List<String> lore, Integer model) {
+        this.material = material;
+        this.amount = amount;
+        this.lore = lore;
+        this.displayName = displayName;
+        this.headOwner = headOwner;
+        this.slot = slot;
+        this.model = model;
     }
 
     /**
