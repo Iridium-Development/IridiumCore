@@ -86,6 +86,7 @@ public class InventoryUtils {
         for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, ItemStackUtils.makeItem(background.filler));
         }
+        if (background.items == null) return;
         for (int slot : background.items.keySet()) {
             if (slot >= inventory.getSize()) continue;
             inventory.setItem(slot, ItemStackUtils.makeItem(background.items.get(slot)));
