@@ -120,7 +120,7 @@ public class Item {
      * @return            The item with the specified model
      */
     public Item setModel(Integer model) {
-        this.setModel(model);
+        this.model = model;
         return this;
     }
 
