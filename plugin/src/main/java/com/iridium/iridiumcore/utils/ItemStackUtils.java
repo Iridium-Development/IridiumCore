@@ -25,7 +25,7 @@ import java.util.UUID;
  */
 public class ItemStackUtils {
 
-    private static final boolean supports = XMaterial.supports(14);
+    private static final boolean supports = XMaterial.supports(16);
 
     /**
      * Creates a new ItemStack from the provided arguments.
