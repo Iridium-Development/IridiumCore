@@ -20,6 +20,7 @@ public class Item {
     public String headOwner;
     public List<String> lore;
     public Integer slot;
+    public Integer model;
 
     /**
      * Creates a new item with the provided data.
@@ -109,6 +110,18 @@ public class Item {
         this.lore = lore;
         this.displayName = displayName;
         this.headOwner = headOwner;
+    }
+
+    /**
+     *
+     * Modifies the item with the provided model.
+     *
+     * @param model       The model of the item
+     * @return            The item with the specified model
+     */
+    public Item setModel(Integer model) {
+        this.model = model;
+        return this;
     }
 
 }

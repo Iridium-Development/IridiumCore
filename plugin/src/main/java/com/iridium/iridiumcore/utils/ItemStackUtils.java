@@ -53,19 +53,32 @@ public class ItemStackUtils {
     /**
      * Creates a new ItemStack from the provided arguments.
      *
+     * @param material The material of this item
+     * @param amount   The amount of this item in the Inventory
+     * @param name     The name of this item. Will be colored automatically
+     * @param lore     The lore of this item
+     * @param model    The model of the item
+     * @return
+     */
+    public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore, Integer model) {
+        return setModel(model, makeItem(material, amount, name, lore));
+    }
+
+    /**
+     * Creates a new ItemStack from the provided arguments.
+     *
      * @param item         An existing item we should clone
      * @param placeholders A list of Placeholders we should claim to the display name and lore
      * @return The new ItemStack
      */
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
-        ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
+        ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders), item.model);
         if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
             itemStack = setHeadData(item.headData, itemStack);
         } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
             UUID uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
             itemStack = setHeadData(SkinUtils.getHeadData(uuid), itemStack);
         }
-
         return itemStack;
     }
 
@@ -137,6 +150,21 @@ public class ItemStackUtils {
         NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
         texture.setString("Value", headData);
         return nbtItem.getItem();
+    }
+
+    /**
+     * Applies the provided model data to the provided ItemStack and returns it.
+     *
+     * @param model  The model data which should be applied
+     * @param itemStack The ItemStack which should have the model data
+     * @return A new ItemStack which is similar to the provided one but has the model data
+     */
+    public static ItemStack setModel(Integer model, ItemStack itemStack){
+        if(model == null) return itemStack;
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setCustomModelData(model.intValue());
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
 }
