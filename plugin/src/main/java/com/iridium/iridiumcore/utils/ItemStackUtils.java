@@ -25,7 +25,7 @@ import java.util.UUID;
  */
 public class ItemStackUtils {
 
-    private static final boolean supports = XMaterial.supports(14);
+    private static final boolean supports = XMaterial.supports(16);
 
     /**
      * Creates a new ItemStack from the provided arguments.
@@ -36,7 +36,7 @@ public class ItemStackUtils {
      * @param lore     The lore of this item
      * @return The new ItemStack
      */
-    public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore, Integer model) {
+    public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore) {
         ItemStack itemStack = material.parseItem();
         if (itemStack == null) return null;
         itemStack.setAmount(amount);
@@ -47,7 +47,21 @@ public class ItemStackUtils {
             itemMeta.setDisplayName(StringUtils.color(name));
             itemStack.setItemMeta(itemMeta);
         }
-        return setModel(model, itemStack);
+        return itemStack;
+    }
+
+    /**
+     * Creates a new ItemStack from the provided arguments.
+     *
+     * @param material The material of this item
+     * @param amount   The amount of this item in the Inventory
+     * @param name     The name of this item. Will be colored automatically
+     * @param lore     The lore of this item
+     * @param model    The model of the item
+     * @return
+     */
+    public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore, Integer model) {
+        return setModel(model, makeItem(material, amount, name, lore));
     }
 
     /**
@@ -65,7 +79,6 @@ public class ItemStackUtils {
             UUID uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
             itemStack = setHeadData(SkinUtils.getHeadData(uuid), itemStack);
         }
-
         return itemStack;
     }
 
@@ -149,7 +162,7 @@ public class ItemStackUtils {
     public static ItemStack setModel(Integer model, ItemStack itemStack){
         if(model == null) return itemStack;
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setCustomModelData(model);
+        itemMeta.setCustomModelData(model.intValue());
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
