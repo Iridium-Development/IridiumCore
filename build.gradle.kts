@@ -18,6 +18,7 @@ allprojects {
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://repo.rosewooddev.io/repository/public/")
         maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
     }
 
