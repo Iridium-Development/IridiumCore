@@ -28,7 +28,8 @@ public enum MinecraftVersion {
     V1_16_R1(() -> new NMS_V1_16_R1(), MultiVersion_V1_16_R1::new),
     V1_16_R2(() -> new NMS_V1_16_R2(), MultiVersion_V1_16_R2::new),
     V1_16_R3(() -> new NMS_V1_16_R3(), MultiVersion_V1_16_R3::new),
-    V1_17_R1(() -> new NMS_V1_17_R1(), MultiVersion_V1_17_R1::new);
+    V1_17_R1(() -> new NMS_V1_17_R1(), MultiVersion_V1_17_R1::new),
+    V1_18_R1(() -> new NMS_V1_18_R1(), MultiVersion_V1_18_R1::new);
 
     private final Supplier<NMS> nmsSupplier;
     private final JavaPluginSupplier<MultiVersion> multiVersionSupplier;
