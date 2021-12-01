@@ -1,7 +1,7 @@
 package com.iridium.iridiumcore;
 
 import com.iridium.iridiumcore.multiversion.*;
-import com.iridium.iridiumcore.multiversion.MultiversionDefault;
+import com.iridium.iridiumcore.multiversion.MultiVersion_V1_18_R1;
 import com.iridium.iridiumcore.nms.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public enum MinecraftVersion {
      * However, this would break the plugins on some machines running the HotSpot VM.
      * Just leave this as it is and add new versions down below in the same way.
      */
-    DEFAULT(() -> new NMSDefault(), MultiversionDefault::new),
+    DEFAULT(() -> new NMS_V1_18_R1(), MultiVersion_V1_18_R1::new),
     V1_8_R2(() -> new NMS_V1_8_R2(), MultiVersion_V1_8_R2::new),
     V1_8_R3(() -> new NMS_V1_8_R3(), MultiVersion_V1_8_R3::new),
     V1_9_R1(() -> new NMS_V1_9_R1(), MultiVersion_V1_9_R1::new),

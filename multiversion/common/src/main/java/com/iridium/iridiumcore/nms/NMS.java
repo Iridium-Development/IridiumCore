@@ -15,21 +15,6 @@ import java.util.List;
 public interface NMS {
 
   /**
-   * Sets blocks faster than with Spigots implementation.
-   * See https://www.spigotmc.org/threads/methods-for-changing-massive-amount-of-blocks-up-to-14m-blocks-s.395868/
-   * for more information.
-   *
-   * @param world        The world where the block should be placed
-   * @param x            The x position of the block
-   * @param y            The y position of the block
-   * @param z            The z position of the block
-   * @param blockId      The ID of this block, used for backwards-compatibility with 1.8 - 1.12
-   * @param data         The data of this block
-   * @param applyPhysics Whether or not to apply physics
-   */
-  void setBlockFast(World world, int x, int y, int z, int blockId, byte data, boolean applyPhysics);
-
-  /**
    * Sends the provided chunk to all the specified players.
    * Used for updating chunks.
    *
