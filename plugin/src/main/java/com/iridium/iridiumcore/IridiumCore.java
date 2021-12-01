@@ -124,16 +124,12 @@ public class IridiumCore extends JavaPlugin {
         try {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             MinecraftVersion minecraftVersion = MinecraftVersion.byName(version);
-            if (minecraftVersion == null) {
-                getLogger().warning("Un-Supported Minecraft Version: " + version);
-                Bukkit.getPluginManager().disablePlugin(this);
-                return;
-            }
 
             this.nms = minecraftVersion.getNms();
             this.multiVersion = minecraftVersion.getMultiVersion(this);
         } catch (Exception exception) {
-            getLogger().warning("Un-Supported Minecraft Version");
+            this.nms = MinecraftVersion.DEFAULT.getNms();
+            this.multiVersion = MinecraftVersion.DEFAULT.getMultiVersion(this);
         }
     }
 
