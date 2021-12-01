@@ -23,6 +23,7 @@ public class NMSDefault implements NMS {
      */
     @Override
     public void sendChunk(List<Player> players, org.bukkit.Chunk chunk) {
+        chunk.getWorld().refreshChunk(chunk.getX(), chunk.getZ());
     }
 
     /**
@@ -41,12 +42,12 @@ public class NMSDefault implements NMS {
     /**
      * Sends a title with the provided properties to the Player.
      *
-     * @param player The Player which should see the title
-     * @param title The upper message of the title
-     * @param subtitle The lower message of the title
-     * @param fadeIn The amount of time this title should fade in in ticks
+     * @param player      The Player which should see the title
+     * @param title       The upper message of the title
+     * @param subtitle    The lower message of the title
+     * @param fadeIn      The amount of time this title should fade in in ticks
      * @param displayTime The amount of time this title should stay fully visible in ticks
-     * @param fadeOut The amount of time this title should fade out in ticks
+     * @param fadeOut     The amount of time this title should fade out in ticks
      */
     @Override
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut) {
