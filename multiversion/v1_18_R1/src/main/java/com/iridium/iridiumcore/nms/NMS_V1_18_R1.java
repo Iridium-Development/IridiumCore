@@ -28,6 +28,7 @@ public class NMS_V1_18_R1 implements NMS {
      */
     @Override
     public void sendChunk(List<Player> players, org.bukkit.Chunk chunk) {
+        chunk.getWorld().refreshChunk(chunk.getX(), chunk.getZ());
     }
 
     /**
@@ -43,35 +44,35 @@ public class NMS_V1_18_R1 implements NMS {
     public void sendWorldBorder(Player player, Color color, double size, Location centerLocation) {
         WorldBorder worldBorder = new WorldBorder();
         worldBorder.world = ((CraftWorld) centerLocation.getWorld()).getHandle();
-        worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
+        worldBorder.c(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
 
         if (color == Color.OFF) {
-            worldBorder.setSize(Integer.MAX_VALUE);
+            worldBorder.a(Integer.MAX_VALUE);
         } else {
-            worldBorder.setSize(size);
+            worldBorder.a(size);
         }
 
-        worldBorder.setWarningBlocks(0);
-        worldBorder.setWarningTime(0);
+        worldBorder.b(0);
+        worldBorder.c(0);
 
         if (color == Color.RED) {
-            worldBorder.lerpSizeBetween(size, size - 1.0D, 20000000L);
+            worldBorder.a(size, size - 1.0D, 20000000L);
         } else if (color == Color.GREEN) {
-            worldBorder.lerpSizeBetween(size - 0.1D, size, 20000000L);
+            worldBorder.a(size - 0.1D, size, 20000000L);
         }
 
-        ((CraftPlayer) player).getHandle().connection.send(new ClientboundInitializeBorderPacket(worldBorder));
+        ((CraftPlayer) player).getHandle().b.a(new ClientboundInitializeBorderPacket(worldBorder));
     }
 
     /**
      * Sends a title with the provided properties to the Player.
      *
-     * @param player The Player which should see the title
-     * @param title The upper message of the title
-     * @param subtitle The lower message of the title
-     * @param fadeIn The amount of time this title should fade in in ticks
+     * @param player      The Player which should see the title
+     * @param title       The upper message of the title
+     * @param subtitle    The lower message of the title
+     * @param fadeIn      The amount of time this title should fade in in ticks
      * @param displayTime The amount of time this title should stay fully visible in ticks
-     * @param fadeOut The amount of time this title should fade out in ticks
+     * @param fadeOut     The amount of time this title should fade out in ticks
      */
     @Override
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut) {
