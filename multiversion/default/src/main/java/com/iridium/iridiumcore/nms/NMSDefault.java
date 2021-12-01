@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -57,43 +58,22 @@ public class NMSDefault implements NMS {
     /**
      * Sends a title with the provided properties to the Player.
      *
-     * @param player      The Player which should see the title
-     * @param title       The upper message of the title
-     * @param subtitle    The lower message of the title
-     * @param fadeIn      The amount of time this title should fade in in ticks
+     * @param player The Player which should see the title
+     * @param title The upper message of the title
+     * @param subtitle The lower message of the title
+     * @param fadeIn The amount of time this title should fade in in ticks
      * @param displayTime The amount of time this title should stay fully visible in ticks
-     * @param fadeOut     The amount of time this title should fade out in ticks
+     * @param fadeOut The amount of time this title should fade out in ticks
      */
     @Override
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut) {
-        sendTitle(player, title, fadeIn, displayTime, fadeOut);
-        sendSubTitle(player, subtitle, fadeIn, displayTime, fadeOut);
-    }
-
-    /**
-     * Sends a subtitle with the provided properties to the Player.
-     *
-     * @param player      The Player which should see the subtitle
-     * @param message     The message of the subtitle
-     * @param fadeIn      The amount of time this subtitle should fade in in ticks
-     * @param displayTime The amount of time this subtitle should stay fully visible in ticks
-     * @param fadeOut     The amount of time this subtitle should fade out in ticks
-     */
-    private void sendSubTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
-        sendTitle(player, "", message, fadeIn, displayTime, fadeOut);
-    }
-
-    /**
-     * Sends a title with the provided properties to the Player.
-     *
-     * @param player      The Player which should see the title
-     * @param message     The message of the title
-     * @param fadeIn      The amount of time this title should fade in in ticks
-     * @param displayTime The amount of time this title should stay fully visible in ticks
-     * @param fadeOut     The amount of time this title should fade out in ticks
-     */
-    private void sendTitle(Player player, String message, int fadeIn, int displayTime, int fadeOut) {
-        sendTitle(player, message, "", fadeIn, displayTime, fadeOut);
+        player.sendTitle(
+                ChatColor.translateAlternateColorCodes('&', title),
+                ChatColor.translateAlternateColorCodes('&', subtitle),
+                fadeIn,
+                displayTime,
+                fadeOut
+        );
     }
 
     @Override
