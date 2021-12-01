@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.4.2"
+version = "1.4.3"
 description = "IridiumCore"
 
 allprojects {
@@ -19,6 +19,7 @@ allprojects {
         maven("https://repo.rosewooddev.io/repository/public/")
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
 
     dependencies {

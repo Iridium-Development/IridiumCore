@@ -1,12 +1,13 @@
 package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.border.WorldBorder;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -14,9 +15,9 @@ import java.util.List;
 /**
  * Interface for working with the net.minecraft.server package.
  * Version-specific, so it has to be implemented for every version we support.
- * This is the implementation for V1_12_R1.
+ * This is the implementation for v1_17_R1.
  */
-public class NMS_V1_12_R1 implements NMS {
+public class NMS_V1_18_R1 implements NMS {
 
     /**
      * Sends the provided chunk to all the specified players.
@@ -27,10 +28,6 @@ public class NMS_V1_12_R1 implements NMS {
      */
     @Override
     public void sendChunk(List<Player> players, org.bukkit.Chunk chunk) {
-        PacketPlayOutMapChunk packetPlayOutMapChunk = new PacketPlayOutMapChunk(((CraftChunk) chunk).getHandle(), 65535);
-        players.forEach(player ->
-                ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutMapChunk)
-        );
     }
 
     /**
@@ -54,16 +51,16 @@ public class NMS_V1_12_R1 implements NMS {
             worldBorder.setSize(size);
         }
 
-        worldBorder.setWarningDistance(0);
+        worldBorder.setWarningBlocks(0);
         worldBorder.setWarningTime(0);
 
         if (color == Color.RED) {
-            worldBorder.transitionSizeBetween(size, size - 1.0D, 20000000L);
+            worldBorder.lerpSizeBetween(size, size - 1.0D, 20000000L);
         } else if (color == Color.GREEN) {
-            worldBorder.transitionSizeBetween(size - 0.1D, size, 20000000L);
+            worldBorder.lerpSizeBetween(size - 0.1D, size, 20000000L);
         }
 
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldBorder, PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE));
+        ((CraftPlayer) player).getHandle().connection.send(new ClientboundInitializeBorderPacket(worldBorder));
     }
 
     /**
@@ -79,11 +76,11 @@ public class NMS_V1_12_R1 implements NMS {
     @Override
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut) {
         player.sendTitle(
-            ChatColor.translateAlternateColorCodes('&', title),
-            ChatColor.translateAlternateColorCodes('&', subtitle),
-            fadeIn,
-            displayTime,
-            fadeOut
+                ChatColor.translateAlternateColorCodes('&', title),
+                ChatColor.translateAlternateColorCodes('&', subtitle),
+                fadeIn,
+                displayTime,
+                fadeOut
         );
     }
 

@@ -19,35 +19,6 @@ import java.util.List;
 public class NMS_V1_16_R1 implements NMS {
 
     /**
-     * Sets blocks faster than with Spigots implementation.
-     * See https://www.spigotmc.org/threads/methods-for-changing-massive-amount-of-blocks-up-to-14m-blocks-s.395868/
-     * for more information.
-     *
-     * @param world        The world where the block should be placed
-     * @param x            The x position of the block
-     * @param y            The y position of the block
-     * @param z            The z position of the block
-     * @param blockId      The ID of this block, used for backwards-compatibility with 1.8 - 1.12
-     * @param data         The data of this block
-     * @param applyPhysics Whether or not to apply physics
-     */
-    @Override
-    public void setBlockFast(org.bukkit.World world, int x, int y, int z, int blockId, byte data, boolean applyPhysics) {
-        World nmsWorld = ((CraftWorld) world).getHandle();
-        Chunk nmsChunk = nmsWorld.getChunkAt(x >> 4, z >> 4);
-        IBlockData ibd = Block.getByCombinedId(blockId + (data << 12));
-
-        ChunkSection chunkSection = nmsChunk.getSections()[y >> 4];
-        if (chunkSection == null) {
-            chunkSection = new ChunkSection(y >> 4 << 4);
-            nmsChunk.getSections()[y >> 4] = chunkSection;
-        }
-
-        chunkSection.setType(x & 15, y & 15, z & 15, ibd);
-        nmsChunk.getWorld().getChunkProvider().getLightEngine().a(new BlockPosition(x, y, z));
-    }
-
-    /**
      * Sends the provided chunk to all the specified players.
      * Used for updating chunks.
      *
