@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.4.4"
+version = "1.4.5"
 description = "IridiumCore"
 
 allprojects {
@@ -25,7 +25,7 @@ allprojects {
     dependencies {
         // Dependencies that we want to shade in
         implementation("org.jetbrains:annotations:22.0.0")
-        implementation("com.github.cryptomorin:XSeries:8.4.0")
+        implementation("com.github.cryptomorin:XSeries:8.5.0")
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.projectlombok:lombok:1.18.22")
