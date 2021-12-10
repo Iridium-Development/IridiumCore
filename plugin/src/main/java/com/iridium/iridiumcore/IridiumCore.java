@@ -31,6 +31,8 @@ public class IridiumCore extends JavaPlugin {
     private boolean isTesting = false;
     private BukkitTask saveTask;
 
+    private static IridiumCore instance;
+
     /**
      * Constructor used for UnitTests
      */
@@ -61,6 +63,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        instance = this;
         if (isTesting) {
             registerListeners();
             return;
@@ -148,6 +151,10 @@ public class IridiumCore extends JavaPlugin {
      * @see Persist
      */
     public void saveConfigs() {
+    }
+
+    public static IridiumCore getInstance() {
+        return instance;
     }
 
 }
