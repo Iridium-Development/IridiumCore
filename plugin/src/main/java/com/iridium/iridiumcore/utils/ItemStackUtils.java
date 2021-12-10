@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore.utils;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -124,6 +125,7 @@ public class ItemStackUtils {
      * @return A new ItemStack which is similar to the provided one but has the head data
      */
     private static ItemStack setHeadData(String headData, ItemStack itemStack) {
+        if (IridiumCore.getInstance().isTesting()) return itemStack;
         if (headData == null) return itemStack;
 
         NBTItem nbtItem = new NBTItem(itemStack);
