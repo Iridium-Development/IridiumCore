@@ -98,7 +98,7 @@ public class IridiumCore extends JavaPlugin {
     @Override
     public void onDisable() {
         if (isTesting) return;
-        saveTask.cancel();
+        if (saveTask != null) saveTask.cancel();
         saveData();
         Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
         getLogger().info("-------------------------------");
