@@ -64,10 +64,6 @@ public class IridiumCore extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        if (isTesting) {
-            registerListeners();
-            return;
-        }
         setupMultiVersion();
 
         if (!PaperLib.isSpigot()) {
