@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.border.WorldBorder;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -18,6 +19,18 @@ import java.util.List;
  * This is the implementation for v1_17_R1.
  */
 public class NMS_V1_18_R1 implements NMS {
+
+    /**
+     * Deletes a block faster than with Spigots implementation.
+     * See https://www.spigotmc.org/threads/methods-for-changing-massive-amount-of-blocks-up-to-14m-blocks-s.395868/
+     * for more information.
+     *
+     * @param location The location of the block which should be deleted
+     */
+    @Override
+    public void deleteBlockFast(Location location) {
+        location.getBlock().setType(Material.AIR, false);
+    }
 
     /**
      * Sends the provided chunk to all the specified players.

@@ -1,10 +1,16 @@
 package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.network.protocol.game.PacketPlayOutMapChunk;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.chunk.Chunk;
+import net.minecraft.world.level.chunk.ChunkSection;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftChunk;
@@ -20,6 +26,29 @@ import java.util.List;
  * This is the implementation for v1_17_R1.
  */
 public class NMS_V1_17_R1 implements NMS {
+
+    /**
+     * Deletes a block faster than with Spigots implementation.
+     * See https://www.spigotmc.org/threads/methods-for-changing-massive-amount-of-blocks-up-to-14m-blocks-s.395868/
+     * for more information.
+     *
+     * @param location The location of the block which should be deleted
+     */
+    @Override
+    public void deleteBlockFast(Location location) {
+        World nmsWorld = ((CraftWorld) location.getWorld()).getHandle();
+        Chunk nmsChunk = nmsWorld.getChunkAt(location.getBlockX() >> 4, location.getBlockZ() >> 4);
+        IBlockData ibd = Block.getByCombinedId(0);
+
+        ChunkSection chunkSection = nmsChunk.getSections()[location.getBlockY() >> 4];
+        if (chunkSection == null) {
+            chunkSection = new ChunkSection(location.getBlockY() >> 4 << 4);
+            nmsChunk.getSections()[location.getBlockY() >> 4] = chunkSection;
+        }
+
+        chunkSection.setType(location.getBlockX() & 15, location.getBlockY() & 15, location.getBlockZ() & 15, ibd);
+        nmsChunk.getWorld().getChunkProvider().getLightEngine().a(new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+    }
 
     /**
      * Sends the provided chunk to all the specified players.

@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface NMS {
 
+  void deleteBlockFast(Location location);
+
   /**
    * Sends the provided chunk to all the specified players.
    * Used for updating chunks.
