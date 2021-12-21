@@ -14,6 +14,19 @@ import java.util.List;
  */
 public class NMSDefault implements NMS {
 
+
+    /**
+     * Deletes a block faster than with Spigots implementation.
+     * See https://www.spigotmc.org/threads/methods-for-changing-massive-amount-of-blocks-up-to-14m-blocks-s.395868/
+     * for more information.
+     *
+     * @param location The location of the block which should be deleted
+     */
+    @Override
+    public void deleteBlockFast(Location location) {
+        location.getBlock().setType(org.bukkit.Material.AIR, false);
+    }
+
     /**
      * Sends the provided chunk to all the specified players.
      * Used for updating chunks.
