@@ -66,7 +66,7 @@ public class IridiumCore extends JavaPlugin {
         instance = this;
         setupMultiVersion();
 
-        if (!PaperLib.isSpigot()) {
+        if (!PaperLib.isSpigot() && !isTesting) {
             // isSpigot returns true if the server is using spigot or a fork
             getLogger().warning("CraftBukkit isn't supported, please use spigot or one of its forks");
             Bukkit.getPluginManager().disablePlugin(this);
