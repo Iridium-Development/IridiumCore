@@ -73,11 +73,13 @@ public class IridiumCore extends JavaPlugin {
             return;
         }
 
-        // Save data regularly
-        saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveData, 0, 20 * 60 * 5);
-
         // Register plugin listeners
         registerListeners();
+
+        if (isTesting) return;
+
+        // Save data regularly
+        saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveData, 0, 20 * 60 * 5);
 
         // Automatically update all inventories
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getServer().getOnlinePlayers().forEach(player -> {
