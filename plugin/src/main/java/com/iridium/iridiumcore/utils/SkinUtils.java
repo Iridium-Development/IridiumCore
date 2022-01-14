@@ -2,10 +2,8 @@ package com.iridium.iridiumcore.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.iridium.iridiumcore.IridiumCore;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
