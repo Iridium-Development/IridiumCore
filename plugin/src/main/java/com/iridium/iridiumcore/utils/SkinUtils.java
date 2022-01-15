@@ -55,7 +55,7 @@ public class SkinUtils {
     }
 
     public static String getHeadData(UUID uuid) {
-        if (uuid.equals(loadingUUID) || uuid.toString().contains("00000000-0000-0000")) return steveSkin;
+        if (uuid.equals(loadingUUID) || isBedrockPlayer(uuid)) return steveSkin;
         if (!cache.containsKey(uuid)) {
             cache.put(uuid, steveSkin);
             CompletableFuture.runAsync(() -> {
@@ -103,5 +103,9 @@ public class SkinUtils {
 
     private static boolean isValidUsername(String input) {
         return input != null && input.matches("\\w{3,16}");
+    }
+    
+    private static boolean isBedrockPlayer(UUID uuid) {
+        return uuid.toString().contains("00000000-0000-0000"); // Bedrock Player (GeyserMC)
     }
 }
