@@ -27,7 +27,7 @@ public class SkinUtils {
     private static final String steveSkin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==";
 
     public static UUID getUUID(String username) {
-        if (!validateUsername(username)) {
+        if (!isValidUsername(username)) {
             OfflinePlayer player = Bukkit.getOfflinePlayer(username);
             return player.getUniqueId();
         }
@@ -55,8 +55,7 @@ public class SkinUtils {
     }
 
     public static String getHeadData(UUID uuid) {
-        if (uuid.equals(loadingUUID)) return steveSkin;
-        if (uuid.toString().contains("00000000-0000-0000")) return steveSkin; // Bedrock Player (GeyserMC)
+        if (uuid.equals(loadingUUID) || uuid.toString().contains("00000000-0000-0000")) return steveSkin;
         if (!cache.containsKey(uuid)) {
             cache.put(uuid, steveSkin);
             CompletableFuture.runAsync(() -> {
@@ -102,19 +101,7 @@ public class SkinUtils {
         return stringBuilder.toString();
     }
 
-    private static boolean validateUsername(String input) {
-        if (input == null || input.isEmpty() || input.length() > 16) {
-            return false;
-        }
-
-        for (int i =0, len = input.length(); i < len; i++) {
-            char c = input.charAt(i);
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '_')) {
-                continue;
-            }
-            return false;
-        }
-
-        return true;
+    private static boolean isValidUsername(String input) {
+        return input != null && input.matches("\\w{3,16}");
     }
 }
