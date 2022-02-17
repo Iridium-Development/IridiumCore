@@ -129,7 +129,7 @@ public class Item {
         this.amount = amount;
         this.lore = lore;
         this.displayName = displayName;
-        this.headUuidOwner = ownerUUID;
+        this.headOwnerUUID = ownerUUID;
         this.headOwner = headOwner;
     }
 }
