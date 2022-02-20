@@ -87,7 +87,7 @@ public class IridiumCore extends JavaPlugin {
             if (inventoryHolder instanceof GUI) {
                 ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
             }
-        }), 0, 1);
+        }), 0, 20);
     }
 
     /**
