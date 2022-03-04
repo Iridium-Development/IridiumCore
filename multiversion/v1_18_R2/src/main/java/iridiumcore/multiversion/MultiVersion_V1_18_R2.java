@@ -1,19 +1,22 @@
-package com.iridium.iridiumcore.multiversion;
+package iridiumcore.multiversion;
 
 import com.cryptomorin.xseries.XMaterial;
-import org.bukkit.*;
+import com.iridium.iridiumcore.multiversion.MultiVersion;
+import io.papermc.lib.PaperLib;
+import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
-import io.papermc.lib.PaperLib;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Interface for working with methods that were changed during an update by Spigot.
  */
-public class MultiVersion_V1_18_R1 extends MultiVersion {
+public class MultiVersion_V1_18_R2 extends MultiVersion {
 
-    public MultiVersion_V1_18_R1(JavaPlugin javaPlugin) {
+    public MultiVersion_V1_18_R2(JavaPlugin javaPlugin) {
         super(javaPlugin);
     }
 
