@@ -40,5 +40,4 @@ public class MultiVersion_V1_18_R1 extends MultiVersion {
     public CompletableFuture<Chunk> getChunkAt(World world, int x, int z) {
         return PaperLib.getChunkAtAsync(world, x, z, true);
     }
-
 }
