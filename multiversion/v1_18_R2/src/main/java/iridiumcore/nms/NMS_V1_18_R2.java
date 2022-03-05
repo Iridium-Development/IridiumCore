@@ -1,13 +1,14 @@
 package iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
-import com.iridium.iridiumcore.nms.NMS;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
+import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.border.WorldBorder;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_18_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -42,7 +43,11 @@ public class NMS_V1_18_R2 implements NMS {
      */
     @Override
     public void sendChunk(List<Player> players, org.bukkit.Chunk chunk) {
-        chunk.getWorld().refreshChunk(chunk.getX(), chunk.getZ());
+        net.minecraft.world.level.chunk.Chunk c = ((CraftChunk)chunk).getHandle();
+        ClientboundLevelChunkWithLightPacket refresh = new ClientboundLevelChunkWithLightPacket(c, c.q.l_(), null, null, true);
+        for (Player player : players) {
+            ((CraftPlayer) player).getHandle().b.a(refresh);
+        }
     }
 
     /**
