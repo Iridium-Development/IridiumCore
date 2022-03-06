@@ -44,8 +44,8 @@ public class NMS_V1_18_R2 implements NMS {
      */
     @Override
     public void sendChunk(List<Player> players, org.bukkit.Chunk chunk) {
-        net.minecraft.world.level.chunk.Chunk chunk = ((CraftChunk) chunk).getHandle();
-        ClientboundLevelChunkWithLightPacket refresh = new ClientboundLevelChunkWithLightPacket(chunk, chunk.q.l_(), null, null, true);
+        net.minecraft.world.level.chunk.Chunk chunkLevel = ((CraftChunk) chunk).getHandle();
+        ClientboundLevelChunkWithLightPacket refresh = new ClientboundLevelChunkWithLightPacket(chunkLevel, chunkLevel.q.l_(), null, null, true);
         for (Player player : players) {
             ((CraftPlayer) player).getHandle().b.a(refresh);
         }
