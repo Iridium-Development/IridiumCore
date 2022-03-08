@@ -63,7 +63,12 @@ public class ItemStackUtils {
         if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
             itemStack = setHeadData(item.headData, itemStack);
         } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-            UUID uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
+            UUID uuid;
+            if (item.headOwnerUUID == null) {
+                uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
+            } else {
+                uuid = item.headOwnerUUID;
+            }
             itemStack = setHeadData(SkinUtils.getHeadData(uuid), itemStack);
         }
 
