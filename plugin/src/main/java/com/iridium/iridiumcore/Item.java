@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Class which represents an item in an inventory.
@@ -18,6 +19,7 @@ public class Item {
     public String displayName;
     public String headData;
     public String headOwner;
+    public UUID headOwnerUUID;
     public List<String> lore;
     public Integer slot;
 
@@ -108,6 +110,26 @@ public class Item {
         this.amount = amount;
         this.lore = lore;
         this.displayName = displayName;
+        this.headOwner = headOwner;
+    }
+
+    /**
+     * Creates a new item with the provided data.
+     * Used for creating player heads in an inventory.
+     *
+     * @param material    The material of the item. Specifies the type
+     * @param amount      The amount of this item. Should not be higher than the max stack size
+     * @param displayName The display name of the item with color codes
+     * @param headOwner   The owner of the head
+     * @param ownerUUID   The UUID owner of the head
+     * @param lore        The lore of the item, can be empty
+     */
+    public Item(XMaterial material, int amount, String displayName, String headOwner, UUID ownerUUID, List<String> lore) {
+        this.material = material;
+        this.amount = amount;
+        this.lore = lore;
+        this.displayName = displayName;
+        this.headOwnerUUID = ownerUUID;
         this.headOwner = headOwner;
     }
 
