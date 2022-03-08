@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Class which represents an item in an inventory.
