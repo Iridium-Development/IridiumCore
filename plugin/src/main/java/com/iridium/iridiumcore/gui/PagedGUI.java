@@ -10,7 +10,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -22,9 +24,11 @@ public abstract class PagedGUI<T> implements GUI {
     private final Background background;
     private final Item previousPage;
     private final Item nextPage;
+    private final Map<Integer, T> items = new HashMap<>();
 
     @Override
     public void addContent(Inventory inventory) {
+        items.clear();
         InventoryUtils.fillInventory(inventory, background);
 
         if (isPaged()) {
@@ -39,13 +43,19 @@ public abstract class PagedGUI<T> implements GUI {
                 .collect(Collectors.toList());
         AtomicInteger slot = new AtomicInteger(0);
         for (T t : objects) {
-            inventory.setItem(slot.getAndIncrement(), getItemStack(t));
+            int currentSlot = slot.getAndIncrement();
+            items.put(currentSlot, t);
+            inventory.setItem(currentSlot, getItemStack(t));
         }
     }
 
     public abstract Collection<T> getPageObjects();
 
     public abstract ItemStack getItemStack(T t);
+
+    public T getItem(int slot) {
+        return items.get(slot);
+    }
 
     public int getSize() {
         int newSize = size;
