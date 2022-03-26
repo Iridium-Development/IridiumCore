@@ -50,7 +50,7 @@ public abstract class PagedGUI<T> implements GUI {
     public int getSize() {
         int newSize = size;
         if (size <= 0) {
-            newSize = (int) (Math.round(getPageObjects().size() / 9.0) * 9);
+            newSize = (int) (Math.ceil(getPageObjects().size() / 9.0) * 9);
         }
         return Math.max(Math.min(newSize, 56), 9);
     }
