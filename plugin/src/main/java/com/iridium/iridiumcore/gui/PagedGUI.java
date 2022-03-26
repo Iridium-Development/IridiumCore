@@ -48,10 +48,11 @@ public abstract class PagedGUI<T> implements GUI {
     public abstract ItemStack getItemStack(T t);
 
     public int getSize() {
+        int newSize = size;
         if (size <= 0) {
-            return Math.min((int) (Math.round(size / 9.0) * 9), 56);
+            newSize = (int) (Math.round(getPageObjects().size() / 9.0) * 9);
         }
-        return size;
+        return Math.max(Math.min(newSize, 56), 9);
     }
 
     public boolean isPaged() {
