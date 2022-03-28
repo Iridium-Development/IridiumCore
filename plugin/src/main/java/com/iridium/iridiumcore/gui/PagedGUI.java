@@ -4,8 +4,8 @@ import com.iridium.iridiumcore.Background;
 import com.iridium.iridiumcore.Item;
 import com.iridium.iridiumcore.utils.InventoryUtils;
 import com.iridium.iridiumcore.utils.ItemStackUtils;
-import lombok.AllArgsConstructor;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 public abstract class PagedGUI<T> implements GUI {
 
     private int page;
@@ -36,6 +35,16 @@ public abstract class PagedGUI<T> implements GUI {
         this.nextPage = nextPage;
         this.previousInventory = null;
         this.backButton = null;
+    }
+
+    public PagedGUI(int page, int size, Background background, Item previousPage, Item nextPage, Inventory previousInventory, Item backButton) {
+        this.page = page;
+        this.size = size;
+        this.background = background;
+        this.previousPage = previousPage;
+        this.nextPage = nextPage;
+        this.previousInventory = previousInventory.getType() == InventoryType.CRAFTING ? previousInventory : null;
+        this.backButton = backButton;
     }
 
     @Override

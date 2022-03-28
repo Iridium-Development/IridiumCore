@@ -4,15 +4,20 @@ import com.iridium.iridiumcore.Background;
 import com.iridium.iridiumcore.Item;
 import com.iridium.iridiumcore.utils.InventoryUtils;
 import com.iridium.iridiumcore.utils.ItemStackUtils;
-import lombok.AllArgsConstructor;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
-@AllArgsConstructor
 public abstract class BackGUI implements GUI {
     private final Background background;
     private final Inventory previousInventory;
     private final Item backButton;
+
+    public BackGUI(Background background, Inventory previousInventory, Item backButton) {
+        this.background = background;
+        this.backButton = backButton;
+        this.previousInventory = previousInventory.getType() == InventoryType.CRAFTING ? previousInventory : null;
+    }
 
     @Override
     public void addContent(Inventory inventory) {
