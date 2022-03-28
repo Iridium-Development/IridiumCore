@@ -48,7 +48,7 @@ public abstract class PagedGUI<T> implements GUI {
             inventory.setItem(inventory.getSize() - 7, ItemStackUtils.makeItem(previousPage));
         }
 
-        int elementsPerPage = inventory.getSize() - (isPaged() ? 9 : 0);
+        int elementsPerPage = inventory.getSize() - (isPaged() || previousInventory != null ? 9 : 0);
         List<T> objects = getPageObjects().stream()
                 .skip((long) (page - 1) * elementsPerPage)
                 .limit(elementsPerPage)
