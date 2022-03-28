@@ -16,7 +16,7 @@ public abstract class BackGUI implements GUI {
     public BackGUI(Background background, Inventory previousInventory, Item backButton) {
         this.background = background;
         this.backButton = backButton;
-        this.previousInventory = previousInventory.getType() == InventoryType.CRAFTING ? previousInventory : null;
+        this.previousInventory = previousInventory.getType() == InventoryType.CHEST ? previousInventory : null;
     }
 
     @Override

@@ -43,7 +43,7 @@ public abstract class PagedGUI<T> implements GUI {
         this.background = background;
         this.previousPage = previousPage;
         this.nextPage = nextPage;
-        this.previousInventory = previousInventory.getType() == InventoryType.CRAFTING ? previousInventory : null;
+        this.previousInventory = previousInventory.getType() == InventoryType.CHEST ? previousInventory : null;
         this.backButton = backButton;
     }
 
