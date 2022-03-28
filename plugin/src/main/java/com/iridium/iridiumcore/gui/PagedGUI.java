@@ -24,7 +24,19 @@ public abstract class PagedGUI<T> implements GUI {
     private final Background background;
     private final Item previousPage;
     private final Item nextPage;
+    private final Inventory previousInventory;
+    private final Item backButton;
     private final Map<Integer, T> items = new HashMap<>();
+
+    public PagedGUI(int page, int size, Background background, Item previousPage, Item nextPage) {
+        this.page = page;
+        this.size = size;
+        this.background = background;
+        this.previousPage = previousPage;
+        this.nextPage = nextPage;
+        this.previousInventory = null;
+        this.backButton = null;
+    }
 
     @Override
     public void addContent(Inventory inventory) {
@@ -46,6 +58,9 @@ public abstract class PagedGUI<T> implements GUI {
             int currentSlot = slot.getAndIncrement();
             items.put(currentSlot, t);
             inventory.setItem(currentSlot, getItemStack(t));
+        }
+        if (previousInventory != null && backButton != null) {
+            inventory.setItem(inventory.getSize() + backButton.slot, ItemStackUtils.makeItem(backButton));
         }
     }
 
@@ -82,6 +97,8 @@ public abstract class PagedGUI<T> implements GUI {
                 page++;
                 event.getWhoClicked().openInventory(getInventory());
             }
+        } else if (previousInventory != null && backButton != null && event.getSlot() == (event.getInventory().getSize() + backButton.slot)) {
+            event.getWhoClicked().openInventory(previousInventory);
         }
     }
 }
