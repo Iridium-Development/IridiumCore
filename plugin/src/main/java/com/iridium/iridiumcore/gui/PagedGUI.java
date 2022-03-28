@@ -77,7 +77,7 @@ public abstract class PagedGUI<T> implements GUI {
         if (size <= 0) {
             newSize = (int) (Math.ceil(getPageObjects().size() / 9.0) * 9);
         }
-        return Math.max(Math.min(newSize, 54), 9);
+        return Math.max(Math.min(newSize + 9, 54), 9);
     }
 
     public boolean isPaged() {
