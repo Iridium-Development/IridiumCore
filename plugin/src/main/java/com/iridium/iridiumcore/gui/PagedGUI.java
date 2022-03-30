@@ -9,10 +9,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -83,6 +80,10 @@ public abstract class PagedGUI<T> implements GUI {
 
     public T getItem(int slot) {
         return items.get(slot);
+    }
+
+    public Optional<Integer> getSlot(T t){
+        return items.keySet().stream().filter(slot -> getItem(slot).equals(t)).findFirst();
     }
 
     public int getSize() {
