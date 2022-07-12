@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.WorldBorder;
+import org.bukkit.World.Environment;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -78,8 +79,12 @@ public class NMS_V1_19_R1 implements NMS {
 
         // WorldBorder worldBorder = new WorldBorder();
         // worldBorder.world = ((CraftWorld) centerLocation.getWorld()).getHandle();
-        worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
+        if(centerLocation.getWorld().getEnvironment() == Environment.NETHER)
+            worldBorder.setCenter(centerLocation.getBlockX()*8 + 0.5, centerLocation.getBlockZ()*8 + 0.5);
+        else
+            worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
 
+        
         if (color == Color.OFF) {
             worldBorder.setSize(Integer.MAX_VALUE);
         } else {
