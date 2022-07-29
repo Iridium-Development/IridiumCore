@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Locale;
 
 /**
  * Class which persists configuration files.
@@ -41,7 +42,7 @@ public class Persist {
      * @return The name of the configuration file
      */
     private static String getName(Class<?> clazz) {
-        return clazz.getSimpleName().toLowerCase();
+        return clazz.getSimpleName().toLowerCase(Locale.ENGLISH);
     }
 
     // ------------------------------------------------------------ //
