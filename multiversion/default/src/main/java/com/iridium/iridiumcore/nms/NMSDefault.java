@@ -1,8 +1,10 @@
 package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -50,6 +52,26 @@ public class NMSDefault implements NMS {
      */
     @Override
     public void sendWorldBorder(Player player, Color color, double size, Location centerLocation) {
+        WorldBorder worldBorder = Bukkit.getServer().createWorldBorder();
+
+        worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
+
+        if (color == Color.OFF) {
+            worldBorder.setSize(Integer.MAX_VALUE);
+        } else {
+            worldBorder.setSize(size);
+        }
+
+        worldBorder.setDamageAmount(0);
+        worldBorder.setDamageBuffer(0);
+
+        if (color == Color.RED) {
+            worldBorder.setSize(size - 0.1D, 20000000L);
+        } else if (color == Color.GREEN) {
+            worldBorder.setSize(size + 0.1D, 20000000L);
+        }
+
+        player.setWorldBorder(worldBorder);
     }
 
     /**
