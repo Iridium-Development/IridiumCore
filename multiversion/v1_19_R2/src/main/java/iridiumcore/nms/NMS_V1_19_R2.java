@@ -11,9 +11,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -23,7 +20,7 @@ import java.util.List;
  * Version-specific, so it has to be implemented for every version we support.
  * This is the implementation for v1_17_R1.
  */
-public class NMS_V1_19_R1 implements NMS {
+public class NMS_V1_19_R2 implements NMS {
 
     /**
      * Deletes a block faster than with Spigots implementation.
