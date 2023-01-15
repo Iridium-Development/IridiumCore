@@ -1,10 +1,7 @@
 package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -15,7 +12,6 @@ import java.util.List;
  * This is the implementation for V1_8_R2.
  */
 public class NMSDefault implements NMS {
-
 
     /**
      * Deletes a block faster than with Spigots implementation.
@@ -54,7 +50,11 @@ public class NMSDefault implements NMS {
     public void sendWorldBorder(Player player, Color color, double size, Location centerLocation) {
         WorldBorder worldBorder = Bukkit.getServer().createWorldBorder();
 
-        worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
+        if (centerLocation.getWorld().getEnvironment() == World.Environment.NETHER) {
+            worldBorder.setCenter(centerLocation.getBlockX() * 8 + 0.5, centerLocation.getBlockZ() * 8 + 0.5);
+        } else {
+            worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
+        }
 
         if (color == Color.OFF) {
             worldBorder.setSize(Integer.MAX_VALUE);
