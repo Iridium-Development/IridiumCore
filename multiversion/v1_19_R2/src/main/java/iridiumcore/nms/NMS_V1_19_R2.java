@@ -2,8 +2,6 @@ package iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
 import com.iridium.iridiumcore.nms.NMS;
-import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.WorldBorder;
 import org.bukkit.World.Environment;

@@ -1,7 +1,7 @@
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.0"
 }
 
 group = "com.iridium"
@@ -17,32 +17,31 @@ allprojects {
         mavenCentral()
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://repo.rosewooddev.io/repository/public/")
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
-        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     }
 
     dependencies {
         // Dependencies that we want to shade in
-        implementation("org.jetbrains:annotations:23.0.0")
-        implementation("com.github.cryptomorin:XSeries:9.2.0")
+        implementation("com.github.cryptomorin:XSeries:9.3.0")
 
         // Other dependencies that are not required or already available at runtime
-        compileOnly("org.projectlombok:lombok:1.18.22")
+        compileOnly("org.jetbrains:annotations:24.0.0")
+        compileOnly("org.projectlombok:lombok:1.18.26")
 
         // Enable lombok annotation processing
-        annotationProcessor("org.projectlombok:lombok:1.18.22")
+        annotationProcessor("org.projectlombok:lombok:1.18.26")
     }
 }
 
 dependencies {
-    // Shade all the sub-projects into the jar
+    // Shade all the subprojects into the jar
     subprojects.forEach { implementation(it) }
 }
 
 tasks {
     jar {
-        dependsOn("shadowJar")
+        dependsOn(shadowJar)
         enabled = false
     }
 
