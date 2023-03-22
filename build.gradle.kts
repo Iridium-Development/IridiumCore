@@ -1,7 +1,7 @@
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.iridium"
@@ -26,7 +26,7 @@ allprojects {
         implementation("com.github.cryptomorin:XSeries:9.3.0")
 
         // Other dependencies that are not required or already available at runtime
-        compileOnly("org.jetbrains:annotations:24.0.0")
+        compileOnly("org.jetbrains:annotations:24.0.1")
         compileOnly("org.projectlombok:lombok:1.18.26")
 
         // Enable lombok annotation processing
