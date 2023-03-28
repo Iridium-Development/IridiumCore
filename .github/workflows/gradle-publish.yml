@@ -53,4 +53,3 @@ jobs:
           coordinates: "groupId=com.iridium artifactId=IridiumCore version=${{steps.version.outputs.version}} generate-pom=on"
           assets: "extension=jar"
           filename: "IridiumCore-*.jar"
-,.
