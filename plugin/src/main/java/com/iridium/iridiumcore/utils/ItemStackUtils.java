@@ -61,7 +61,7 @@ public class ItemStackUtils {
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
         if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-            itemStack = setHeadData(item.headData, itemStack);
+            return setHeadData(item.headData, itemStack);
         } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
             UUID uuid;
             if (item.headOwnerUUID == null) {
@@ -69,7 +69,9 @@ public class ItemStackUtils {
             } else {
                 uuid = item.headOwnerUUID;
             }
-            itemStack = setHeadData(SkinUtils.getHeadData(uuid), itemStack);
+            return setHeadData(SkinUtils.getHeadData(uuid), itemStack);
+        } else if (item.model != null) {
+            return setModel(item.model, itemStack);
         }
 
         return itemStack;
@@ -144,6 +146,23 @@ public class ItemStackUtils {
         NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
         texture.setString("Value", headData);
         return nbtItem.getItem();
+    }
+
+
+    /**
+     * Applies the provided model data to the provided ItemStack and returns it.
+     *
+     * @param model     The model data which should be applied
+     * @param itemStack The ItemStack which should have the model data
+     * @return A new ItemStack which is similar to the provided one but has the model data
+     */
+    private static ItemStack setModel(int model, ItemStack itemStack) {
+        if (IridiumCore.getInstance().isTesting()) return itemStack;
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return itemStack;
+        itemMeta.setCustomModelData(model);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
 }

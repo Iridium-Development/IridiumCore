@@ -20,6 +20,7 @@ public class Item {
     public String headData;
     public String headOwner;
     public UUID headOwnerUUID;
+    public Integer model;
     public List<String> lore;
     public Integer slot;
 
@@ -131,6 +132,23 @@ public class Item {
         this.displayName = displayName;
         this.headOwnerUUID = ownerUUID;
         this.headOwner = headOwner;
+    }
+
+    /**
+     * Creates a new item with the provided data.
+     *
+     * @param material    The material of the item. Specifies the type
+     * @param amount      The amount of this item. Should not be higher than the max stack size
+     * @param displayName The display name of the item with color codes
+     * @param model       The Model of the item
+     * @param lore        The lore of the item, can be empty
+     */
+    public Item(XMaterial material, int amount, String displayName, int model, List<String> lore) {
+        this.material = material;
+        this.amount = amount;
+        this.lore = lore;
+        this.displayName = displayName;
+        this.model = model;
     }
 
 }
