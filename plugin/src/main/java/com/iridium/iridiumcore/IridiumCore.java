@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
-import java.util.logging.Filter;
 
 /**
  * The main class of this plugin which handles initialization

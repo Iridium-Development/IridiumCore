@@ -4,7 +4,6 @@ import com.cryptomorin.xseries.XMaterial;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_16_R2.legacy.CraftLegacy;
@@ -17,7 +16,6 @@ import java.util.concurrent.CompletableFuture;
  */
 public class MultiVersion_V1_16_R2 extends MultiVersion {
 
-    @SuppressWarnings("deprecation")
     public MultiVersion_V1_16_R2(JavaPlugin javaPlugin) {
         super(javaPlugin);
     }

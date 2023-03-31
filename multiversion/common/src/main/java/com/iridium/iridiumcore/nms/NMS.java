@@ -3,7 +3,6 @@ package com.iridium.iridiumcore.nms;
 import com.iridium.iridiumcore.Color;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.List;
