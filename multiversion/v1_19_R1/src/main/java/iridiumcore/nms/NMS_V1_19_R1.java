@@ -2,8 +2,6 @@ package iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
 import com.iridium.iridiumcore.nms.NMS;
-import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.WorldBorder;
 import org.bukkit.World.Environment;
@@ -11,9 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_19_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -21,7 +16,7 @@ import java.util.List;
 /**
  * Interface for working with the net.minecraft.server package.
  * Version-specific, so it has to be implemented for every version we support.
- * This is the implementation for v1_17_R1.
+ * This is the implementation for v1_19_R1.
  */
 public class NMS_V1_19_R1 implements NMS {
 

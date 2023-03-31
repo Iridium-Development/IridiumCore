@@ -14,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
  */
 public class MultiVersion_V1_13_R1 extends MultiVersion {
 
-    @SuppressWarnings("deprecation")
     public MultiVersion_V1_13_R1(JavaPlugin javaPlugin) {
         super(javaPlugin);
     }
