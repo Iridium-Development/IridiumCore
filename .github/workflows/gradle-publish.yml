@@ -28,3 +28,28 @@ jobs:
       with:
         name: "IridiumCore"
         path: "build/libs/IridiumCore-*.jar"
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    if: "contains(github.event.commits[0].message, 'Version Increment')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: thecodemonkey/action-get-gradle-version@master
+        id: version
+        with:
+          file: "build.gradle.kts"
+      - uses: actions/download-artifact@v3.0.2
+        with:
+          name: "IridiumCore"
+          path: "./"
+      - name: Publish to Nexus
+        uses: sonatype-nexus-community/nexus-repo-github-action@master
+        with:
+          serverUrl: "https://nexus.iridiumdevelopment.net/"
+          username: "${{ secrets.NEXUS_USERNAME }}"
+          password: "${{ secrets.NEXUS_PASSWORD }}"
+          format: "maven2"
+          repository: "maven-releases"
+          coordinates: "groupId=com.iridium artifactId=IridiumCore version=${{steps.version.outputs.version}} generate-pom=on"
+          assets: "extension=jar"
+          filename: "IridiumCore-*.jar"
