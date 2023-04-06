@@ -79,7 +79,7 @@ public class StringUtils {
         boolean isBold = false;
 
         for (char c : message.toCharArray()) {
-            if (c == '§') {
+            if (c == '\u00A7') {
                 previousCode = true;
             } else if (previousCode) {
                 previousCode = false;
