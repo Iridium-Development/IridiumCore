@@ -182,7 +182,8 @@ public class Persist {
                 return objectMapper.readValue(file, clazz);
             } catch (IOException e) {
                 javaPlugin.getLogger().severe("Failed to parse " + file + ": " + e.getMessage());
-                Bukkit.getPluginManager().disablePlugin(javaPlugin);
+                file.delete();
+                load(clazz, file);
             }
         }
         try {
