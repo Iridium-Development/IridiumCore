@@ -192,7 +192,7 @@ public class Persist {
                     Files.move(file.toPath(), backupFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException exception) {
                     javaPlugin.getLogger().severe(
-                            "Failed to move " + file + " to "
+                            "Failed to move " + file.getName() + " to "
                                     + javaPlugin.getDataFolder().getName() + File.separator + "backups: "
                                     + exception.getMessage());
                     Bukkit.getPluginManager().disablePlugin(javaPlugin);
