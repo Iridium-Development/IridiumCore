@@ -10,6 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 
 /**
@@ -183,10 +185,18 @@ public class Persist {
             } catch (IOException e) {
                 javaPlugin.getLogger().severe("Failed to parse " + file + ": " + e.getMessage());
                 javaPlugin.getLogger().severe("Getting a backup for " + file + " into backups folder");
-                configFile.renameTo(new File(javaPlugin.getDataFolder(), "broken_" + name + persistType.getExtension()));
-                File backupFolder = new File(pluginFolder.getPath(), "backups");
-                backupFolder.mkdirs();
-                Files.move(configFile.toPath(), backupFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    file.renameTo(new File(javaPlugin.getDataFolder(), "broken_" + file.getName() + persistType.getExtension()));
+                    File backupFolder = new File(javaPlugin.getDataFolder().getPath(), "backups");
+                    backupFolder.mkdirs();
+                    Files.move(file.toPath(), backupFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException exception) {
+                    javaPlugin.getLogger().severe(
+                            "Failed to move " + file + " to "
+                                    + javaPlugin.getDataFolder().getName() + File.separator + "backups: "
+                                    + exception.getMessage());
+                    Bukkit.getPluginManager().disablePlugin(javaPlugin);
+                }
             }
         }
         try {
