@@ -182,8 +182,11 @@ public class Persist {
                 return objectMapper.readValue(file, clazz);
             } catch (IOException e) {
                 javaPlugin.getLogger().severe("Failed to parse " + file + ": " + e.getMessage());
-                file.delete();
-                load(clazz, file);
+                javaPlugin.getLogger().severe("Getting a backup for " + file + " into backups folder");
+                configFile.renameTo(new File(javaPlugin.getDataFolder(), "broken_" + name + persistType.getExtension()));
+                File backupFolder = new File(pluginFolder.getPath(), "backups");
+                backupFolder.mkdirs();
+                Files.move(configFile.toPath(), backupFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         }
         try {
