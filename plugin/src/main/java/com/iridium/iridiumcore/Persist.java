@@ -10,6 +10,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 /**
@@ -182,7 +185,19 @@ public class Persist {
                 return objectMapper.readValue(file, clazz);
             } catch (IOException e) {
                 javaPlugin.getLogger().severe("Failed to parse " + file + ": " + e.getMessage());
-                Bukkit.getPluginManager().disablePlugin(javaPlugin);
+                javaPlugin.getLogger().severe("Getting a backup for " + file + " into backups folder");
+                try {
+                    file.renameTo(new File(javaPlugin.getDataFolder(), "broken_" + file.getName() + "_" + LocalDateTime.now() + persistType.getExtension()));
+                    File backupFolder = new File(javaPlugin.getDataFolder().getPath(), "backups");
+                    if (!backupFolder.exists()) backupFolder.mkdirs();
+                    Files.move(file.toPath(), backupFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException exception) {
+                    javaPlugin.getLogger().severe(
+                            "Failed to move " + file.getName() + " to "
+                                    + javaPlugin.getDataFolder().getName() + File.separator + "backups: "
+                                    + exception.getMessage());
+                    Bukkit.getPluginManager().disablePlugin(javaPlugin);
+                }
             }
         }
         try {
