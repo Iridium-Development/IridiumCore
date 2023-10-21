@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 /**
@@ -186,9 +187,9 @@ public class Persist {
                 javaPlugin.getLogger().severe("Failed to parse " + file + ": " + e.getMessage());
                 javaPlugin.getLogger().severe("Getting a backup for " + file + " into backups folder");
                 try {
-                    file.renameTo(new File(javaPlugin.getDataFolder(), "broken_" + file.getName() + persistType.getExtension()));
+                    file.renameTo(new File(javaPlugin.getDataFolder(), "broken_" + file.getName() + "_" + LocalDateTime.now() + persistType.getExtension()));
                     File backupFolder = new File(javaPlugin.getDataFolder().getPath(), "backups");
-                    backupFolder.mkdirs();
+                    if (!backupFolder.exists()) backupFolder.mkdirs();
                     Files.move(file.toPath(), backupFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException exception) {
                     javaPlugin.getLogger().severe(
