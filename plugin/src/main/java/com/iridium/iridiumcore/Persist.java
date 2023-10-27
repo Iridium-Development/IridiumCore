@@ -200,6 +200,7 @@ public class Persist {
                 } catch (IOException exception) {
                     javaPlugin.getLogger().severe(
                             "Failed to move " + file + " to "
+
                                     + javaPlugin.getDataFolder().getName() + File.separator + "backups: "
                                     + exception.getMessage());
                     Bukkit.getPluginManager().disablePlugin(javaPlugin);
@@ -207,6 +208,7 @@ public class Persist {
 
                 javaPlugin.getLogger().info("Success! Backup \"" + file.getName() + "\" created, check \"" + backupFolder.getPath() + "\".");
                 load(clazz, file);
+
             }
         }
 
