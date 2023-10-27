@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -184,21 +185,31 @@ public class Persist {
                 return objectMapper.readValue(file, clazz);
             } catch (IOException e) {
                 javaPlugin.getLogger().severe("Failed to parse " + file + ": " + e.getMessage());
-                javaPlugin.getLogger().severe("Getting a backup for " + file + " into backups folder");
+                javaPlugin.getLogger().severe("Creating a backup for " + file.getName() + " in \"backups\" folder...");
+
+                String backupFolderName = "backups";
+                File pluginFolder = new File(javaPlugin.getDataFolder().getPath());
+                File backupFolder = new File(pluginFolder.getPath() + File.separator + backupFolderName);
+                File backupConfigFile = new File(backupFolder + File.separator + file.getName());
+
                 try {
-                    file.renameTo(new File(javaPlugin.getDataFolder(), "broken_" + file.getName() + persistType.getExtension()));
-                    File backupFolder = new File(javaPlugin.getDataFolder().getPath(), "backups");
-                    backupFolder.mkdirs();
-                    Files.move(file.toPath(), backupFolder.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    if (!backupFolder.exists()) backupFolder.mkdir();
+                    Files.copy(file.toPath(), backupConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    file.renameTo(new File(javaPlugin.getDataFolder(), file.getName() + "_BROKEN"));
+
                 } catch (IOException exception) {
                     javaPlugin.getLogger().severe(
-                            "Failed to move " + file.getName() + " to "
+                            "Failed to move " + file + " to "
                                     + javaPlugin.getDataFolder().getName() + File.separator + "backups: "
                                     + exception.getMessage());
                     Bukkit.getPluginManager().disablePlugin(javaPlugin);
                 }
+
+                javaPlugin.getLogger().info("Success! Backup \"" + file.getName() + "\" created, check \"" + backupFolder.getPath() + "\".");
+                load(clazz, file);
             }
         }
+
         try {
             return clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
@@ -216,7 +227,7 @@ public class Persist {
      * @param <T>     The type of class
      * @return The loaded class. Might be null
      */
-    public <T> T load(Class<T> clazz, String content) {
+    public <T> T load(Class < T > clazz, String content) {
         try {
             return objectMapper.readValue(content, clazz);
         } catch (IOException e) {
@@ -268,7 +279,5 @@ public class Persist {
         public JsonFactory getFactory() {
             return factory;
         }
-
     }
-
 }
