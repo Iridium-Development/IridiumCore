@@ -26,7 +26,7 @@ allprojects {
         implementation("com.github.cryptomorin:XSeries:9.8.1") { isTransitive = false }
 
         // Other dependencies that are not required or already available at runtime
-        compileOnly("org.jetbrains:annotations:24.0.1")
+        compileOnly("org.jetbrains:annotations:24.1.0")
         compileOnly("org.projectlombok:lombok:1.18.26")
 
         // Enable lombok annotation processing
