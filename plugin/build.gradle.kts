@@ -11,7 +11,7 @@ dependencies {
     implementation("io.papermc:paperlib:1.0.8")
 
     // Other dependencies that are not required or already available at runtime
-    compileOnly("org.jetbrains:annotations:24.0.1")
+    compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
 
     // Include all the nms sub-modules
