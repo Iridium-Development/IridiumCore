@@ -6,7 +6,6 @@ import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTListCompound;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemFlag;
@@ -21,8 +20,6 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class which creates {@link ItemStack}'s.
@@ -138,15 +135,11 @@ public class ItemStackUtils {
         if (IridiumCore.getInstance().isTesting()) return itemStack;
         if (headData == null) return itemStack;
 
-        IridiumCore.getInstance().getLogger().info("Setting "+headData + " as HeadData for ItemStack");
-
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");
         if (supports) {
-            IridiumCore.getInstance().getLogger().info("Setting as uuid");
             skull.setUUID("Id", UUID.randomUUID());
         } else {
-            IridiumCore.getInstance().getLogger().info("Setting as String");
             skull.setString("Id", UUID.randomUUID().toString());
         }
 
