@@ -16,10 +16,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Class which creates {@link ItemStack}'s.
@@ -27,6 +24,8 @@ import java.util.UUID;
 public class ItemStackUtils {
 
     private static final boolean supports = XMaterial.supports(16);
+
+    private static final HashMap<String, UUID> uuidMap = new HashMap<>();
 
     /**
      * Creates a new ItemStack from the provided arguments.
@@ -138,9 +137,9 @@ public class ItemStackUtils {
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");
         if (supports) {
-            skull.setUUID("Id", UUID.randomUUID());
+            skull.setUUID("Id", getHeadDataUUID(headData));
         } else {
-            skull.setString("Id", UUID.randomUUID().toString());
+            skull.setString("Id", getHeadDataUUID(headData).toString());
         }
 
         NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
@@ -163,6 +162,13 @@ public class ItemStackUtils {
         itemMeta.setCustomModelData(model);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    private static UUID getHeadDataUUID(String headData){
+        if(!uuidMap.containsKey(headData)){
+            uuidMap.put(headData, UUID.randomUUID());
+        }
+        return uuidMap.get(headData);
     }
 
 }
