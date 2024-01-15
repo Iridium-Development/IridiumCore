@@ -31,9 +31,6 @@ public class ItemStackUtils {
 
     private static final boolean supports = XMaterial.supports(16);
 
-    @Getter
-    private static final Logger logger = CreateLogger();
-
     /**
      * Creates a new ItemStack from the provided arguments.
      *
@@ -141,15 +138,15 @@ public class ItemStackUtils {
         if (IridiumCore.getInstance().isTesting()) return itemStack;
         if (headData == null) return itemStack;
 
-        logger.fine("Setting "+headData + " as HeadData for ItemStack");
+        IridiumCore.getInstance().getLogger().info("Setting "+headData + " as HeadData for ItemStack");
 
         NBTItem nbtItem = new NBTItem(itemStack);
         NBTCompound skull = nbtItem.addCompound("SkullOwner");
         if (supports) {
-            logger.fine("Setting as uuid");
+            IridiumCore.getInstance().getLogger().info("Setting as uuid");
             skull.setUUID("Id", UUID.randomUUID());
         } else {
-            logger.fine("Setting as String");
+            IridiumCore.getInstance().getLogger().info("Setting as String");
             skull.setString("Id", UUID.randomUUID().toString());
         }
 
@@ -173,12 +170,6 @@ public class ItemStackUtils {
         itemMeta.setCustomModelData(model);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
-    }
-
-    private static Logger CreateLogger(){
-        Logger l = Logger.getLogger(ItemStackUtils.class.getName());
-        l.setLevel(Level.OFF);
-        return l;
     }
 
 }

@@ -2,6 +2,7 @@ package com.iridium.iridiumcore.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.iridium.iridiumcore.IridiumCore;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,34 +30,31 @@ public class SkinUtils {
 
     private static final String steveSkin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==";
 
-    @Getter
-    private static final Logger logger = CreateLogger();
-
     public static UUID getUUID(String username) {
-        logger.fine("Getting UUID for "+username);
+        IridiumCore.getInstance().getLogger().info("Getting UUID for "+username);
         if (!isValidUsername(username)) {
             OfflinePlayer player = Bukkit.getOfflinePlayer(username);
             return player.getUniqueId();
         }
         if (!uuidCache.containsKey(username)) {
-            logger.fine("UUID is not in cache");
+            IridiumCore.getInstance().getLogger().info("UUID is not in cache");
             uuidCache.put(username, loadingUUID);
             CompletableFuture.runAsync(() -> {
                 try {
                     String signature = getURLContent("https://api.mojang.com/users/profiles/minecraft/" + username);
 
-                    logger.finer("Retrieved "+signature+" for "+ username);
+                    IridiumCore.getInstance().getLogger().info("Retrieved "+signature+" for "+ username);
                     if (!signature.isEmpty()) {
                         JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
                         String value = profileJsonObject.get("id").getAsString();
-                        logger.fine("Retrieved "+value+" for "+ username);
+                        IridiumCore.getInstance().getLogger().info("Retrieved "+value+" for "+ username);
                         if (value != null) {
                             uuidCache.put(username,
                                     UUID.fromString(value.replaceFirst(
                                             "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
                                             "$1-$2-$3-$4-$5"
                                     )));
-                            logger.finer("put "+uuidCache.get(username)+" into cache for "+ username);
+                            IridiumCore.getInstance().getLogger().info("put "+uuidCache.get(username)+" into cache for "+ username);
                         }
                     }
                 } catch (UnknownHostException ignored) {
@@ -67,15 +65,15 @@ public class SkinUtils {
     }
 
     public static String getHeadData(UUID uuid) {
-        logger.fine("Getting Head Data for "+uuid);
+        IridiumCore.getInstance().getLogger().info("Getting Head Data for "+uuid);
         if (uuid.equals(loadingUUID) || isBedrockPlayer(uuid)) return steveSkin;
         if (!cache.containsKey(uuid)) {
-            logger.fine("Head Data for "+uuid +" is not in cache");
+            IridiumCore.getInstance().getLogger().info("Head Data for "+uuid +" is not in cache");
             cache.put(uuid, steveSkin);
             CompletableFuture.runAsync(() -> {
                 try {
                     String signature = getURLContent("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
-                    logger.finer("Returned "+signature +" for "+uuid);
+                    IridiumCore.getInstance().getLogger().info("Returned "+signature +" for "+uuid);
                     if (!signature.isEmpty()) {
                         JsonObject profileJsonObject = gson.fromJson(signature, JsonObject.class);
                         if (profileJsonObject.has("properties")) {
@@ -86,7 +84,7 @@ public class SkinUtils {
                             String skinURL = textureJsonObject.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
                             byte[] skinByte = ("{\"textures\":{\"SKIN\":{\"url\":\"" + skinURL + "\"}}}").getBytes();
                             String data = new String(Base64.getEncoder().encode(skinByte));
-                            logger.fine("Returned "+data +" for "+uuid);
+                            IridiumCore.getInstance().getLogger().info("Returned "+data +" for "+uuid);
                             cache.put(uuid, data);
                         }
                     }
@@ -94,7 +92,7 @@ public class SkinUtils {
                 }
             });
         }
-        logger.fine("returned "+cache.get(uuid) +" for "+uuid);
+        IridiumCore.getInstance().getLogger().info("returned "+cache.get(uuid) +" for "+uuid);
         return cache.get(uuid);
     }
 
@@ -124,10 +122,5 @@ public class SkinUtils {
     
     private static boolean isBedrockPlayer(UUID uuid) {
         return uuid.toString().contains("00000000-0000-0000"); // Bedrock Player (GeyserMC)
-    }
-    private static Logger CreateLogger(){
-        Logger l = Logger.getLogger(ItemStackUtils.class.getName());
-        l.setLevel(Level.OFF);
-        return l;
     }
 }
