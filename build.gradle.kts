@@ -62,6 +62,9 @@ tasks {
 
 publishing {
     publications.create<MavenPublication>("maven") {
-        from(components["java"])
+        setGroupId(group)
+        setArtifactId(description)
+        setVersion(version)
+        artifact(tasks["shadowJar"])
     }
 }
