@@ -62,6 +62,9 @@ tasks {
 
 publishing {
     publications.create<MavenPublication>("maven") {
-        from(components["java"])
+        setGroupId("com.iridium")
+        setArtifactId("IridiumCore")
+        setVersion(version)
+        artifact(tasks["shadowJar"])
     }
 }
