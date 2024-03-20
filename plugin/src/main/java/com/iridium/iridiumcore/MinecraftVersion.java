@@ -2,8 +2,6 @@ package com.iridium.iridiumcore;
 
 import com.iridium.iridiumcore.multiversion.*;
 import com.iridium.iridiumcore.nms.*;
-import iridiumcore.multiversion.*;
-import iridiumcore.nms.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
