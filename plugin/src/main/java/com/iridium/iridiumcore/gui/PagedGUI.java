@@ -82,7 +82,7 @@ public abstract class PagedGUI<T> implements GUI {
         return items.get(slot);
     }
 
-    public Optional<Integer> getSlot(T t){
+    public Optional<Integer> getSlot(T t) {
         return items.keySet().stream().filter(slot -> getItem(slot).equals(t)).findFirst();
     }
 
@@ -100,6 +100,11 @@ public abstract class PagedGUI<T> implements GUI {
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
+        if (previousInventory != null && event.getSlot() == (event.getInventory().getSize() + backButton.slot)) {
+            event.getWhoClicked().openInventory(previousInventory);
+            return;
+        }
+
         if (isPaged()) {
             if (event.getSlot() == getInventory().getSize() - 7) {
                 if (page > 1) {
@@ -111,10 +116,6 @@ public abstract class PagedGUI<T> implements GUI {
                     page++;
                     event.getWhoClicked().openInventory(getInventory());
                 }
-            }
-        } else if (previousInventory != null && backButton != null) {
-            if (event.getSlot() == event.getInventory().getSize() + backButton.slot) {
-                event.getWhoClicked().openInventory(previousInventory);
             }
         }
     }
