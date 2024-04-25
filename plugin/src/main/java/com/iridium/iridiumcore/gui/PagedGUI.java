@@ -4,6 +4,7 @@ import com.iridium.iridiumcore.Background;
 import com.iridium.iridiumcore.Item;
 import com.iridium.iridiumcore.utils.InventoryUtils;
 import com.iridium.iridiumcore.utils.ItemStackUtils;
+import lombok.Getter;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 public abstract class PagedGUI<T> implements GUI {
 
+    @Getter
     private int page;
     private final int size;
     private final Background background;
