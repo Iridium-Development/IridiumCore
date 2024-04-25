@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.8.9"
+version = "1.9.0"
 description = "IridiumCore"
 
 allprojects {
