@@ -47,6 +47,15 @@ public interface NMS {
    */
   void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut);
 
+    /**
+     * Sends a "Hologram" (Invisible ArmorStand) to a Player
+     *
+     * @param player   The Player which should see the hologram
+     * @param location The location for the hologram
+     * @param text     A list of text that we should show
+     */
+    void sendHologram(Player player, Location location, List<String> text);
+
   /**
    * @return The server's recent tps
    */

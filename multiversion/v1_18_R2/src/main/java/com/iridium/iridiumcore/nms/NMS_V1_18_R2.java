@@ -1,9 +1,13 @@
 package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
+import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
+import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.decoration.EntityArmorStand;
 import net.minecraft.world.level.border.WorldBorder;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -102,6 +106,24 @@ public class NMS_V1_18_R2 implements NMS {
                 displayTime,
                 fadeOut
         );
+    }
+
+    @Override
+    public void sendHologram(Player player, Location location, List<String> text) {
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        for (int i = -1; ++i < text.size(); ) {
+            EntityArmorStand entityArmorStand = new EntityArmorStand(craftWorld.getHandle(), location.getX(), location.getY(), location.getZ());
+
+            entityArmorStand.j(true);
+            entityArmorStand.n(true);
+            entityArmorStand.a(new ChatMessage(text.get(i)));
+
+            PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entityArmorStand);
+            PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(entityArmorStand.ae(), entityArmorStand.ai(), true);
+            ((CraftPlayer) player).getHandle().b.a(packetPlayOutSpawnEntityLiving);
+            ((CraftPlayer) player).getHandle().b.a(packetPlayOutEntityMetadata);
+            location = location.subtract(0, 0.4, 0);
+        }
     }
 
     @Override
