@@ -1,7 +1,6 @@
 package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
-import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
@@ -116,7 +115,7 @@ public class NMS_V1_18_R2 implements NMS {
 
             entityArmorStand.j(true);
             entityArmorStand.n(true);
-            entityArmorStand.a(new ChatMessage(text.get(i)));
+            entityArmorStand.a(text.get(i));
 
             PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entityArmorStand);
             PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(entityArmorStand.ae(), entityArmorStand.ai(), true);
