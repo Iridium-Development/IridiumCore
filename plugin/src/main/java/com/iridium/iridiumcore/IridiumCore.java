@@ -29,7 +29,7 @@ public class IridiumCore extends JavaPlugin {
     private NMS nms;
     private MultiVersion multiVersion;
     @Setter
-    private boolean isTesting = false;
+    private static boolean isTesting = false;
     private BukkitTask saveTask;
 
     private static IridiumCore instance;
