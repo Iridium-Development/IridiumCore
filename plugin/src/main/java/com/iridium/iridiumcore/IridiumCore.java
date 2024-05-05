@@ -6,6 +6,7 @@ import com.iridium.iridiumcore.nms.NMS;
 import io.papermc.lib.PaperLib;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
@@ -27,6 +28,7 @@ public class IridiumCore extends JavaPlugin {
     private Persist persist;
     private NMS nms;
     private MultiVersion multiVersion;
+    @Setter
     private boolean isTesting = false;
     private BukkitTask saveTask;
 
@@ -37,7 +39,7 @@ public class IridiumCore extends JavaPlugin {
      */
     public IridiumCore(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
-        this.isTesting = true;
+        setTesting(true);
         // Disable logging
         getLogger().setFilter(record -> false);
     }
