@@ -29,7 +29,8 @@ public class IridiumCore extends JavaPlugin {
     private NMS nms;
     private MultiVersion multiVersion;
     @Setter
-    private static boolean isTesting = false;
+    @Getter
+    private static boolean testing = false;
     private BukkitTask saveTask;
 
     private static IridiumCore instance;
@@ -67,7 +68,7 @@ public class IridiumCore extends JavaPlugin {
         instance = this;
         setupMultiVersion();
 
-        if (!PaperLib.isSpigot() && !isTesting) {
+        if (!PaperLib.isSpigot() && !isTesting()) {
             // isSpigot returns true if the server is using spigot or a fork
             getLogger().warning("CraftBukkit isn't supported, please use spigot or one of its forks");
             Bukkit.getPluginManager().disablePlugin(this);
@@ -77,7 +78,7 @@ public class IridiumCore extends JavaPlugin {
         // Register plugin listeners
         registerListeners();
 
-        if (isTesting) return;
+        if (isTesting()) return;
 
         // Save data regularly
         saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::saveData, 0, 20 * 60 * 5);
@@ -96,7 +97,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        if (isTesting) return;
+        if (isTesting()) return;
         if (saveTask != null) saveTask.cancel();
         saveData();
         Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);

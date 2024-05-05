@@ -6,8 +6,6 @@ import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTListCompound;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -131,7 +129,7 @@ public class ItemStackUtils {
      * @return A new ItemStack which is similar to the provided one but has the head data
      */
     private static ItemStack setHeadData(String headData, ItemStack itemStack) {
-        if (IridiumCore.getInstance().isTesting()) return itemStack;
+        if (IridiumCore.isTesting()) return itemStack;
         if (headData == null) return itemStack;
 
         NBTItem nbtItem = new NBTItem(itemStack);
@@ -156,7 +154,7 @@ public class ItemStackUtils {
      * @return A new ItemStack which is similar to the provided one but has the model data
      */
     private static ItemStack setModel(int model, ItemStack itemStack) {
-        if (IridiumCore.getInstance().isTesting()) return itemStack;
+        if (IridiumCore.isTesting()) return itemStack;
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) return itemStack;
         itemMeta.setCustomModelData(model);
