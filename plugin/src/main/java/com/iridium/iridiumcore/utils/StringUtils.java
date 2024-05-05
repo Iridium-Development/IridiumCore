@@ -2,7 +2,6 @@ package com.iridium.iridiumcore.utils;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.iridium.iridiumcore.DefaultFontInfo;
-import org.bukkit.ChatColor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,7 +71,7 @@ public class StringUtils {
 
     public static String getCenteredMessage(String message, String buffer) {
         if (message == null || message.equals("")) return "";
-        message = ChatColor.translateAlternateColorCodes('&', message);
+        message = StringUtils.color(message);
 
         int messagePxSize = 0;
         boolean previousCode = false;
@@ -99,7 +98,7 @@ public class StringUtils {
         int compensated = 0;
         StringBuilder sb = new StringBuilder();
         while (compensated < toCompensate) {
-            sb.append(buffer);
+            sb.append(StringUtils.color(buffer));
             compensated += spaceLength;
         }
         return sb + message + sb;
