@@ -27,10 +27,10 @@ allprojects {
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.jetbrains:annotations:24.1.0")
-        compileOnly("org.projectlombok:lombok:1.18.30")
+        compileOnly("org.projectlombok:lombok:1.18.32")
 
         // Enable lombok annotation processing
-        annotationProcessor("org.projectlombok:lombok:1.18.30")
+        annotationProcessor("org.projectlombok:lombok:1.18.32")
     }
 }
 
