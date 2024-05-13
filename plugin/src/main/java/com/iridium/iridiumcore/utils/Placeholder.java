@@ -1,5 +1,7 @@
 package com.iridium.iridiumcore.utils;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import lombok.Getter;
@@ -11,8 +13,10 @@ import lombok.Getter;
 public class Placeholder {
 
     private final String key;
+    private final String formattedKey;
     private String value;
     private Supplier<String> supplier;
+    private Function<Integer, String> int_supplier;
 
     /**
      * The default constructor.
@@ -21,7 +25,8 @@ public class Placeholder {
      * @param value The actual value of the placeholder
      */
     public Placeholder(String key, String value) {
-        this.key = "%" + key + "%";
+        this.key = key;
+        this.formattedKey = "%" + key + "%";
         this.value = value;
     }
 
@@ -32,15 +37,27 @@ public class Placeholder {
      * @param value The actual value of the placeholder
      */
     public Placeholder(String key, Supplier<String> supplier) {
-        this.key = "%" + key + "%";
+        this.key = key;
+        this.formattedKey = "%" + key + "%";
         this.supplier = supplier;
     }
 
-    public String getValue()
-    {
-        if(value==null && supplier!=null) value = supplier.get();
-        return value; 
+    /**
+     * The default constructor.
+     *
+     * @param key   The placeholder without curly brackets.
+     * @param value The actual value of the placeholder
+     */
+    public Placeholder(String key, Function<Integer, String> supplier) {
+        this.key = key;
+        this.formattedKey = "%" + key + "%";
+        this.int_supplier = supplier;
     }
+
+    public String getValue() {
+        return value;
+    }
+
     /**
      * Replaces this placeholder in the provided line with the value of this
      * placeholder.
