@@ -55,13 +55,14 @@ public class Placeholder {
     }
 
     public String getValue() {
+        if(value==null && supplier!=null) value = supplier.get();
         return value;
     }
 
     public String getValue(int i) {
         if(this.int_supplier!=null)
             return this.int_supplier.apply(i);
-        return value;
+        return getValue();
     }
 
     /**
