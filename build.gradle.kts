@@ -23,7 +23,7 @@ allprojects {
 
     dependencies {
         // Dependencies that we want to shade in
-        implementation("com.github.cryptomorin:XSeries:9.10.0") { isTransitive = false }
+        implementation("com.github.cryptomorin:XSeries:10.0.0") { isTransitive = false }
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.jetbrains:annotations:24.1.0")
