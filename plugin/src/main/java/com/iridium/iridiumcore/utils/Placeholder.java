@@ -58,6 +58,12 @@ public class Placeholder {
         return value;
     }
 
+    public String getValue(int i) {
+        if(this.int_supplier!=null)
+            return this.int_supplier.apply(i);
+        return value;
+    }
+
     /**
      * Replaces this placeholder in the provided line with the value of this
      * placeholder.
