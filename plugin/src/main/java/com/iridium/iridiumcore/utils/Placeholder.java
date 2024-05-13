@@ -69,8 +69,8 @@ public class Placeholder {
     public String process(String line) {
         if (line == null || line.isEmpty())
             return "";
-        if (line.contains(key))
-            return line.replace(key, getValue());
+        if (line.contains(formattedKey))
+            return line.replace(formattedKey, getValue());
         else
             return line;
     }
