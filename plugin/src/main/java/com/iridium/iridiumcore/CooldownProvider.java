@@ -33,7 +33,7 @@ public class CooldownProvider<T> {
      */
     public boolean isOnCooldown(Object t) {
         if(t instanceof Entity) {
-            return isOnCooldown(((Entity) t).getEntityId());
+            return isOnCooldown(((Entity) t).getUniqueId());
         }
 
         return cooldownTimes.containsKey(t) && cooldownTimes.get(t).toMillis() > System.currentTimeMillis();
@@ -48,7 +48,7 @@ public class CooldownProvider<T> {
      */
     public Duration getRemainingTime(Object t) {
         if(t instanceof Entity){
-            return getRemainingTime(((Entity) t).getEntityId());
+            return getRemainingTime(((Entity) t).getUniqueId());
         }
 
         if (!isOnCooldown(t)) return Duration.ZERO;
@@ -64,7 +64,7 @@ public class CooldownProvider<T> {
      */
     public void applyCooldown(Object t) {
         if(t instanceof Entity){
-            applyCooldown(((Entity) t).getEntityId());
+            applyCooldown(((Entity) t).getUniqueId());
             return;
         }
 
