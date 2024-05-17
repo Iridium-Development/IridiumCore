@@ -3,6 +3,7 @@ package com.iridium.iridiumcore.utils;
 import com.cryptomorin.xseries.XMaterial;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTListCompound;
@@ -132,17 +133,12 @@ public class ItemStackUtils {
         if (IridiumCore.isTesting()) return itemStack;
         if (headData == null) return itemStack;
 
-        NBTItem nbtItem = new NBTItem(itemStack);
-        NBTCompound skull = nbtItem.addCompound("SkullOwner");
-        if (supports) {
-            skull.setUUID("Id", getHeadDataUUID(headData));
-        } else {
-            skull.setString("Id", getHeadDataUUID(headData).toString());
-        }
-
-        NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
-        texture.setString("Value", headData);
-        return nbtItem.getItem();
+        NBT.modify(itemStack, readWriteItemNBT -> {
+            if (supports) readWriteItemNBT.getOrCreateCompound("SkullOwner").setUUID("Id", getHeadDataUUID(headData));
+            else readWriteItemNBT.getOrCreateCompound("SkullOwner").setString("Id", getHeadDataUUID(headData).toString());
+            readWriteItemNBT.getOrCreateCompound("SkullOwner").getOrCreateCompound("Properties").getCompoundList("textures").addCompound().setString("Value", headData);
+        });
+        return itemStack;
     }
 
 
