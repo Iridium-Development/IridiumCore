@@ -195,8 +195,8 @@ public class Persist {
                 try {
                     if (!backupFolder.exists()) backupFolder.mkdir();
                     Files.copy(file.toPath(), backupConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    file.renameTo(new File(javaPlugin.getDataFolder(), file.getName() + "_BROKEN"));
-
+                    file.delete();
+                    load(clazz, file);
                 } catch (IOException exception) {
                     javaPlugin.getLogger().severe(
                             "Failed to move " + file + " to "
