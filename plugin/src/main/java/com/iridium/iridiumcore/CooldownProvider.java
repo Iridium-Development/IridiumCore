@@ -1,5 +1,7 @@
 package com.iridium.iridiumcore;
 
+import org.bukkit.entity.Entity;
+
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +13,7 @@ import java.util.Map;
  */
 public class CooldownProvider<T> {
 
-    private final Map<T, Duration> cooldownTimes = new HashMap<>();
+    private final Map<Object, Duration> cooldownTimes = new HashMap<>();
     private final Duration duration;
 
     /**
@@ -29,7 +31,11 @@ public class CooldownProvider<T> {
      * @param t The entity which should be checked
      * @return True if the entity has a valid cooldown
      */
-    public boolean isOnCooldown(T t) {
+    public boolean isOnCooldown(Object t) {
+        if(t instanceof Entity) {
+            return isOnCooldown(((Entity) t).getUniqueId());
+        }
+
         return cooldownTimes.containsKey(t) && cooldownTimes.get(t).toMillis() > System.currentTimeMillis();
     }
 
@@ -40,7 +46,11 @@ public class CooldownProvider<T> {
      * @param t The entity which should be checked
      * @return The duration of the cooldown, can be ZERO
      */
-    public Duration getRemainingTime(T t) {
+    public Duration getRemainingTime(Object t) {
+        if(t instanceof Entity){
+            return getRemainingTime(((Entity) t).getUniqueId());
+        }
+
         if (!isOnCooldown(t)) return Duration.ZERO;
 
         return cooldownTimes.get(t).minusMillis(System.currentTimeMillis());
@@ -52,8 +62,12 @@ public class CooldownProvider<T> {
      *
      * @param t The entity which should be checked
      */
-    public void applyCooldown(T t) {
+    public void applyCooldown(Object t) {
+        if(t instanceof Entity){
+            applyCooldown(((Entity) t).getUniqueId());
+            return;
+        }
+
         cooldownTimes.put(t, duration.plusMillis(System.currentTimeMillis()));
     }
-
 }
