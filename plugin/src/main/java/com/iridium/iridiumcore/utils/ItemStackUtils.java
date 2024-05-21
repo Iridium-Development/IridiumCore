@@ -3,9 +3,10 @@ package com.iridium.iridiumcore.utils;
 import com.cryptomorin.xseries.XMaterial;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTListCompound;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.changeme.nbtapi.utils.DataFixerUtil;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -133,16 +134,26 @@ public class ItemStackUtils {
         if (headData == null) return itemStack;
 
         NBTItem nbtItem = new NBTItem(itemStack);
-        NBTCompound skull = nbtItem.addCompound("SkullOwner");
+        nbtItem.setInteger("Count", itemStack.getAmount());
+        nbtItem.setString("id", "player_head");
+
+        ReadWriteNBT skull = NBT.createNBTObject();
+
         if (supports) {
             skull.setUUID("Id", getHeadDataUUID(headData));
         } else {
             skull.setString("Id", getHeadDataUUID(headData).toString());
         }
 
-        NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
+        ReadWriteNBT texture = skull.getOrCreateCompound("Properties").getCompoundList("textures").addCompound();
         texture.setString("Value", headData);
-        return nbtItem.getItem();
+
+        nbtItem.getOrCreateCompound("tag").getOrCreateCompound("SkullOwner").mergeCompound(skull);
+        try {
+            return NBT.itemStackFromNBT(DataFixerUtil.fixUpItemData(nbtItem, DataFixerUtil.VERSION1_20_4, DataFixerUtil.getCurrentVersion()));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
