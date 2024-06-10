@@ -23,6 +23,7 @@ import java.util.*;
  * Class which creates {@link ItemStack}'s.
  */
 public class ItemStackUtils {
+    private static HashMap<String, SkullState> skullRequests = new HashMap<>();
 
     private static final boolean supports = XMaterial.supports(16);
 
@@ -62,11 +63,13 @@ public class ItemStackUtils {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
 
         if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
-            if (IridiumCore.getInstance().setItemStackSync()) {
-                XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).apply();
-            } else {
-                XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).applyAsync();
-
+            String skullData = StringUtils.processMultiplePlaceholders(item.skullData, placeholders);
+            if (!skullRequests.containsKey(skullData)) {
+                XSkull.of(itemStack).profile(skullData).applyAsync().thenRun(() -> skullRequests.put(skullData, SkullState.LOADED));
+                skullRequests.put(skullData, SkullState.LOADING);
+            }
+            if (skullRequests.get(skullData) == SkullState.LOADED) {
+                itemStack = XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).apply();
             }
         }
 
@@ -176,6 +179,10 @@ public class ItemStackUtils {
             uuidMap.put(headData, UUID.randomUUID());
         }
         return uuidMap.get(headData);
+    }
+
+    private enum SkullState {
+        NONE, LOADING, LOADED;
     }
 
 }

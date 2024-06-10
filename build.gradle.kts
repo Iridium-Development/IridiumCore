@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.9.9-b1"
+version = "1.2.0"
 description = "IridiumCore"
 
 allprojects {
@@ -15,6 +15,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://repo.rosewooddev.io/repository/public/")
         maven("https://repo.papermc.io/repository/maven-public/")

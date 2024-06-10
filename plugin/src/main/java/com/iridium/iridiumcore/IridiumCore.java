@@ -153,10 +153,6 @@ public class IridiumCore extends JavaPlugin {
     public void saveConfigs() {
     }
 
-    public boolean setItemStackSync() {
-        return true;
-    }
-
     public static IridiumCore getInstance() {
         return instance;
     }
