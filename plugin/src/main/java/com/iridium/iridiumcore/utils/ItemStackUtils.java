@@ -1,7 +1,6 @@
 package com.iridium.iridiumcore.utils;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSkull;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBT;
@@ -64,16 +63,17 @@ public class ItemStackUtils {
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
 
-        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
-            String skullData = StringUtils.processMultiplePlaceholders(item.skullData, placeholders);
-            if (!skullRequests.containsKey(skullData) || skullRequests.get(skullData).hasTimeout()) {
-                XSkull.of(itemStack).profile(skullData).applyAsync().thenRun(() -> skullRequests.put(skullData, new SkullData(SkullState.LOADED)));
-                skullRequests.put(skullData, new SkullData(SkullState.LOADING));
-            }
-            if (skullRequests.get(skullData).skullState == SkullState.LOADED) {
-                itemStack = XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).apply();
-            }
-        }
+//        Removed until https://github.com/CryptoMorin/XSeries/issues/266 is fixed
+//        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
+//            String skullData = StringUtils.processMultiplePlaceholders(item.skullData, placeholders);
+//            if (!skullRequests.containsKey(skullData) || skullRequests.get(skullData).hasTimeout()) {
+//                XSkull.of(itemStack).profile(skullData).applyAsync().thenRun(() -> skullRequests.put(skullData, new SkullData(SkullState.LOADED)));
+//                skullRequests.put(skullData, new SkullData(SkullState.LOADING));
+//            }
+//            if (skullRequests.get(skullData).skullState == SkullState.LOADED) {
+//                itemStack = XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).apply();
+//            }
+//        }
 
         return itemStack;
     }
