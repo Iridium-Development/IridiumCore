@@ -61,7 +61,7 @@ public class ItemStackUtils {
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
 
-        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty()) {
+        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
             XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).applyAsync();
         }
 
@@ -166,8 +166,8 @@ public class ItemStackUtils {
         return itemStack;
     }
 
-    private static UUID getHeadDataUUID(String headData){
-        if(!uuidMap.containsKey(headData)){
+    private static UUID getHeadDataUUID(String headData) {
+        if (!uuidMap.containsKey(headData)) {
             uuidMap.put(headData, UUID.randomUUID());
         }
         return uuidMap.get(headData);
