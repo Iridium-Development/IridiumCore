@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.iridium"
-version = "1.9.7"
+version = "1.9.8"
 description = "IridiumCore"
 
 allprojects {
@@ -19,15 +19,18 @@ allprojects {
         maven("https://repo.rosewooddev.io/repository/public/")
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/")
+        maven("https://libraries.minecraft.net")
     }
 
     dependencies {
         // Dependencies that we want to shade in
-        implementation("com.github.cryptomorin:XSeries:11.0.0") { isTransitive = false }
+        implementation("com.github.cryptomorin:XSeries:11.0.0")
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.jetbrains:annotations:24.1.0")
         compileOnly("org.projectlombok:lombok:1.18.32")
+        // This is needed for XSkin, but isnt added to the XSeries jar, potentially a bug that will be fixed in a later release
+        compileOnly("com.mojang:authlib:1.5.25")
 
         // Enable lombok annotation processing
         annotationProcessor("org.projectlombok:lombok:1.18.32")
