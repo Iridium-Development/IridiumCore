@@ -8,6 +8,7 @@ import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.utils.DataFixerUtil;
+import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -17,13 +18,14 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * Class which creates {@link ItemStack}'s.
  */
 public class ItemStackUtils {
-    private static HashMap<String, SkullState> skullRequests = new HashMap<>();
+    private static HashMap<String, SkullData> skullRequests = new HashMap<>();
 
     private static final boolean supports = XMaterial.supports(16);
 
@@ -64,11 +66,11 @@ public class ItemStackUtils {
 
         if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
             String skullData = StringUtils.processMultiplePlaceholders(item.skullData, placeholders);
-            if (!skullRequests.containsKey(skullData)) {
-                XSkull.of(itemStack).profile(skullData).applyAsync().thenRun(() -> skullRequests.put(skullData, SkullState.LOADED));
-                skullRequests.put(skullData, SkullState.LOADING);
+            if (!skullRequests.containsKey(skullData) || skullRequests.get(skullData).hasTimeout()) {
+                XSkull.of(itemStack).profile(skullData).applyAsync().thenRun(() -> skullRequests.put(skullData, new SkullData(SkullState.LOADED)));
+                skullRequests.put(skullData, new SkullData(SkullState.LOADING));
             }
-            if (skullRequests.get(skullData) == SkullState.LOADED) {
+            if (skullRequests.get(skullData).skullState == SkullState.LOADED) {
                 itemStack = XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).apply();
             }
         }
@@ -179,6 +181,21 @@ public class ItemStackUtils {
             uuidMap.put(headData, UUID.randomUUID());
         }
         return uuidMap.get(headData);
+    }
+
+    @AllArgsConstructor
+    private static class SkullData {
+        SkullState skullState;
+        LocalDateTime localDateTime;
+
+        public SkullData(SkullState skullState) {
+            this.skullState = skullState;
+            this.localDateTime = LocalDateTime.now();
+        }
+
+        public boolean hasTimeout() {
+            return skullState == SkullState.LOADING && localDateTime.isBefore(LocalDateTime.now().minusSeconds(5));
+        }
     }
 
     private enum SkullState {
