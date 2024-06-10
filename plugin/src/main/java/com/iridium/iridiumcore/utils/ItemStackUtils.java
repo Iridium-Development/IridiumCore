@@ -61,8 +61,8 @@ public class ItemStackUtils {
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
 
-        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && item.skullData.isEmpty()) {
-            return XSkull.setProfile(itemStack, XSkull.getProfile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)));
+        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty()) {
+            XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).applyAsync();
         }
 
         return itemStack;
