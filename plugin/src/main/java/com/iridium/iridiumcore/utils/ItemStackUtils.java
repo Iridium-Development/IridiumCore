@@ -1,12 +1,14 @@
 package com.iridium.iridiumcore.utils;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSkull;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.utils.DataFixerUtil;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,7 +39,7 @@ public class ItemStackUtils {
      */
     public static ItemStack makeItem(XMaterial material, int amount, String name, List<String> lore) {
         ItemStack itemStack = material.parseItem();
-        if (itemStack == null) return null;
+        if (itemStack == null) return new ItemStack(Material.AIR);
         itemStack.setAmount(amount);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
@@ -58,18 +60,9 @@ public class ItemStackUtils {
      */
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
-        if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
-            return setHeadData(item.headData, itemStack);
-        } else if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-            UUID uuid;
-            if (item.headOwnerUUID == null) {
-                uuid = SkinUtils.getUUID(StringUtils.processMultiplePlaceholders(item.headOwner, placeholders));
-            } else {
-                uuid = item.headOwnerUUID;
-            }
-            return setHeadData(SkinUtils.getHeadData(uuid), itemStack);
-        } else if (item.model != null) {
-            return setModel(item.model, itemStack);
+
+        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && item.skullData.isEmpty()) {
+            return XSkull.setProfile(itemStack, XSkull.getProfile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)));
         }
 
         return itemStack;

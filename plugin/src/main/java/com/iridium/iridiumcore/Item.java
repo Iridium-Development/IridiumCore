@@ -17,6 +17,7 @@ public class Item {
     public XMaterial material;
     public int amount;
     public String displayName;
+    public String skullData;
     public String headData;
     public String headOwner;
     public UUID headOwnerUUID;
