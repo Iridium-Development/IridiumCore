@@ -97,4 +97,22 @@ public class Item {
         this.model = model;
     }
 
+    /**
+     * Migrates deprecated data over to the new methods
+     */
+    public void migrateData() {
+        if (headOwner != null && !headOwner.isEmpty()) {
+            skullData = headOwner;
+            headOwner = null;
+        }
+        if (headOwnerUUID != null) {
+            skullData = headOwnerUUID.toString();
+            headOwnerUUID = null;
+        }
+        if (headData != null && !headData.isEmpty()) {
+            skullData = headData;
+            headData = null;
+        }
+    }
+
 }
