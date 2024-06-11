@@ -1,12 +1,20 @@
 package com.iridium.iridiumcore.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 public class SkinUtils {
-
-    public static ItemStack getSkull(String playerName) {
-        ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
-
-        return XSkull.of(itemStack).profile(getHeadData(getUUID(playerName))).apply();
-    }
 
     private static final HashMap<UUID, String> cache = new HashMap<>();
     private static final HashMap<String, UUID> uuidCache = new HashMap<>();
