@@ -84,7 +84,7 @@ public class SkinUtils {
             String str;
             while ((str = in.readLine()) != null) stringBuilder.append(str);
         } catch (Exception exception) {
-            exception.printStackTrace();
+//            exception.printStackTrace();
         } finally {
             try {
                 if (in != null) in.close();
