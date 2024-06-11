@@ -1,13 +1,13 @@
 package com.iridium.iridiumcore.utils;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSkull;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.utils.DataFixerUtil;
-import lombok.AllArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -17,18 +17,18 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Class which creates {@link ItemStack}'s.
  */
 public class ItemStackUtils {
-    private static HashMap<String, SkullData> skullRequests = new HashMap<>();
-
     private static final boolean supports = XMaterial.supports(16);
 
     private static final HashMap<String, UUID> uuidMap = new HashMap<>();
+
+    private static final Pattern username = Pattern.compile("[A-Za-z0-9_]{1,16}");
 
     /**
      * Creates a new ItemStack from the provided arguments.
@@ -64,16 +64,14 @@ public class ItemStackUtils {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
 
 //        Removed until https://github.com/CryptoMorin/XSeries/issues/266 is fixed
-//        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
-//            String skullData = StringUtils.processMultiplePlaceholders(item.skullData, placeholders);
-//            if (!skullRequests.containsKey(skullData) || skullRequests.get(skullData).hasTimeout()) {
-//                XSkull.of(itemStack).profile(skullData).applyAsync().thenRun(() -> skullRequests.put(skullData, new SkullData(SkullState.LOADED)));
-//                skullRequests.put(skullData, new SkullData(SkullState.LOADING));
-//            }
-//            if (skullRequests.get(skullData).skullState == SkullState.LOADED) {
-//                itemStack = XSkull.of(itemStack).profile(StringUtils.processMultiplePlaceholders(item.skullData, placeholders)).apply();
-//            }
-//        }
+        if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
+            String skullData = StringUtils.processMultiplePlaceholders(item.skullData, placeholders);
+            if (username.matcher(skullData).matches()) {
+                skullData = SkinUtils.getHeadData(SkinUtils.getUUID(skullData));
+            }
+
+            itemStack = XSkull.of(itemStack).profile(skullData).apply();
+        }
 
         return itemStack;
     }
@@ -181,25 +179,6 @@ public class ItemStackUtils {
             uuidMap.put(headData, UUID.randomUUID());
         }
         return uuidMap.get(headData);
-    }
-
-    @AllArgsConstructor
-    private static class SkullData {
-        SkullState skullState;
-        LocalDateTime localDateTime;
-
-        public SkullData(SkullState skullState) {
-            this.skullState = skullState;
-            this.localDateTime = LocalDateTime.now();
-        }
-
-        public boolean hasTimeout() {
-            return skullState == SkullState.LOADING && localDateTime.isBefore(LocalDateTime.now().minusSeconds(5));
-        }
-    }
-
-    private enum SkullState {
-        NONE, LOADING, LOADED;
     }
 
 }
