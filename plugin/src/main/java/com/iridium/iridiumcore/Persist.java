@@ -195,8 +195,8 @@ public class Persist {
                 try {
                     if (!backupFolder.exists()) backupFolder.mkdir();
                     Files.copy(file.toPath(), backupConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    file.renameTo(new File(javaPlugin.getDataFolder(), file.getName() + "_BROKEN"));
-
+                    Files.delete(file.toPath());
+                    javaPlugin.getLogger().info("Success! Backup \"" + file.getName() + "\" created, check \"" + backupFolder.getPath() + "\".");
                 } catch (IOException exception) {
                     javaPlugin.getLogger().severe(
                             "Failed to move " + file + " to "
@@ -205,10 +205,7 @@ public class Persist {
                                     + exception.getMessage());
                     Bukkit.getPluginManager().disablePlugin(javaPlugin);
                 }
-
-                javaPlugin.getLogger().info("Success! Backup \"" + file.getName() + "\" created, check \"" + backupFolder.getPath() + "\".");
                 load(clazz, file);
-
             }
         }
 
