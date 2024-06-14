@@ -43,6 +43,7 @@ public class IridiumCore extends JavaPlugin {
         setTesting(true);
         // Disable logging
         getLogger().setFilter(record -> false);
+        instance = this;
     }
 
     /**
@@ -51,6 +52,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onLoad() {
+        instance = this; // we need to override this later, but the Item.migrateData() needs this.
         // Create the data folder in order to make Jackson work
         getDataFolder().mkdir();
 
