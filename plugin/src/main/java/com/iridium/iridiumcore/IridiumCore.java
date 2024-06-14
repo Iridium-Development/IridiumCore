@@ -51,6 +51,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onLoad() {
+        instance = this;
         // Create the data folder in order to make Jackson work
         getDataFolder().mkdir();
 
@@ -65,7 +66,6 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        instance = this;
         setupMultiVersion();
 
         if (!PaperLib.isSpigot() && !isTesting()) {
