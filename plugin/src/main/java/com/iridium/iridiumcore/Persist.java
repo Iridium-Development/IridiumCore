@@ -1,17 +1,13 @@
 package com.iridium.iridiumcore;
 
+import com.cryptomorin.xseries.XBiome;
 import com.cryptomorin.xseries.XEnchantment;
-import com.fasterxml.jackson.core.JacksonException;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XPotion;
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import org.bukkit.Bukkit;
@@ -45,11 +41,17 @@ public class Persist {
 
         objectMapper = new ObjectMapper(persistType.getFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
 
-        // Registering the XEnchant (de)serializer.
-        SimpleModule xEnchantModule = new SimpleModule();
-        xEnchantModule.addSerializer(XEnchantment.class, new XEnchantmentSerializer());
-        xEnchantModule.addDeserializer(XEnchantment.class, new XEnchantmentDeserializer());
-        objectMapper.registerModule(xEnchantModule);
+        // Registering the XSeries (de)serializers.
+        SimpleModule xSeriesModule = new SimpleModule();
+        xSeriesModule.addSerializer(XMaterial.class, new XSeriesSerialSupplier.XMaterialSerializer());
+        xSeriesModule.addDeserializer(XMaterial.class, new XSeriesSerialSupplier.XMaterialDeserializer());
+        xSeriesModule.addSerializer(XPotion.class, new XSeriesSerialSupplier.XPotionSerializer());
+        xSeriesModule.addDeserializer(XPotion.class, new XSeriesSerialSupplier.XPotionDeserializer());
+        xSeriesModule.addSerializer(XEnchantment.class, new XSeriesSerialSupplier.XEnchantmentSerializer());
+        xSeriesModule.addDeserializer(XEnchantment.class, new XSeriesSerialSupplier.XEnchantmentDeserializer());
+        xSeriesModule.addSerializer(XBiome.class, new XSeriesSerialSupplier.XBiomeSerializer());
+        xSeriesModule.addDeserializer(XBiome.class, new XSeriesSerialSupplier.XBiomeDeserializer());
+        objectMapper.registerModule(xSeriesModule);
     }
 
     /**
@@ -292,40 +294,6 @@ public class Persist {
          */
         public JsonFactory getFactory() {
             return factory;
-        }
-    }
-
-    // These are required because XEnchants changed their enums for version 10.0.0.
-
-    /**
-     * XEnchantment serializer for XSeries version < 10.0.0.
-     */
-    public class XEnchantmentSerializer extends StdSerializer<XEnchantment> {
-
-        public XEnchantmentSerializer() {
-            super(XEnchantment.class);
-        }
-
-        @Override
-        public void serialize(XEnchantment xEnchantment, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(xEnchantment.toString());
-        }
-    }
-
-    /**
-     * XEnchantment deserializer for XSeries version >= 10.0.0.
-     */
-    public class XEnchantmentDeserializer extends StdDeserializer<XEnchantment> {
-
-        public XEnchantmentDeserializer() {
-            super(XEnchantment.class);
-        }
-
-        @Override
-        public XEnchantment deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
-            JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            String xEnchantment = node.toString();
-            return XEnchantment.matchXEnchantment(xEnchantment).get();
         }
     }
 }
