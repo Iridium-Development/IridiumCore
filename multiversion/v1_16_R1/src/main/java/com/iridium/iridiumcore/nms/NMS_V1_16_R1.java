@@ -110,6 +110,24 @@ public class NMS_V1_16_R1 implements NMS {
     }
 
     @Override
+    public void sendHologram(Player player, Location location, List<String> text) {
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        for (int i = -1; ++i < text.size(); ) {
+            EntityArmorStand entityArmorStand = new EntityArmorStand(craftWorld.getHandle(), location.getX(), location.getY(), location.getZ());
+
+            entityArmorStand.setInvisible(true);
+            entityArmorStand.setCustomNameVisible(true);
+            entityArmorStand.setCustomName(new ChatMessage(text.get(i)));
+
+            PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entityArmorStand);
+            PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(entityArmorStand.getId(), entityArmorStand.getDataWatcher(), true);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutSpawnEntityLiving);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutEntityMetadata);
+            location = location.subtract(0, 0.4, 0);
+        }
+    }
+
+    @Override
     public double[] getTPS() {
         return MinecraftServer.getServer().recentTps;
     }

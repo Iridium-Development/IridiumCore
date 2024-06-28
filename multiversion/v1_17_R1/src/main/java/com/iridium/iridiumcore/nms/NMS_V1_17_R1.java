@@ -2,9 +2,13 @@ package com.iridium.iridiumcore.nms;
 
 import com.iridium.iridiumcore.Color;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.network.chat.ChatMessage;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
 import net.minecraft.network.protocol.game.PacketPlayOutMapChunk;
+import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.entity.decoration.EntityArmorStand;
 import net.minecraft.world.level.World;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.IBlockData;
@@ -117,6 +121,24 @@ public class NMS_V1_17_R1 implements NMS {
             displayTime,
             fadeOut
         );
+    }
+
+    @Override
+    public void sendHologram(Player player, Location location, List<String> text) {
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        for (int i = -1; ++i < text.size(); ) {
+            EntityArmorStand entityArmorStand = new EntityArmorStand(craftWorld.getHandle(), location.getX(), location.getY(), location.getZ());
+
+            entityArmorStand.setInvisible(true);
+            entityArmorStand.setCustomNameVisible(true);
+            entityArmorStand.setCustomName(new ChatMessage(text.get(i)));
+
+            PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entityArmorStand);
+            PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(entityArmorStand.getId(), entityArmorStand.getDataWatcher(), true);
+            ((CraftPlayer) player).getHandle().b.sendPacket(packetPlayOutSpawnEntityLiving);
+            ((CraftPlayer) player).getHandle().b.sendPacket(packetPlayOutEntityMetadata);
+            location = location.subtract(0, 0.4, 0);
+        }
     }
 
     @Override
