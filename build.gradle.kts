@@ -50,8 +50,7 @@ tasks {
     }
 
     shadowJar {
-        fun relocate(origin: String) =
-            relocate(origin, "com.iridium.iridiumcore.dependencies${origin.substring(origin.lastIndexOf('.'))}")
+        fun relocate(origin: String) = relocate(origin, "com.iridium.iridiumcore.dependencies${origin.substring(origin.lastIndexOf('.'))}")
 
         relocate("de.tr7zw.changeme.nbtapi")
         relocate("com.iridium.iridiumcolorapi")
