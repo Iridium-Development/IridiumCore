@@ -44,20 +44,24 @@ dependencies {
 }
 
 tasks {
-    jar {
+    // Add the shadowJar task to the build task
+    build {
         dependsOn(shadowJar)
-        enabled = false
     }
 
     shadowJar {
+        fun relocate(origin: String) =
+            relocate(origin, "com.iridium.iridiumcore.dependencies${origin.substring(origin.lastIndexOf('.'))}")
+
+        relocate("de.tr7zw.changeme.nbtapi")
+        relocate("com.iridium.iridiumcolorapi")
+        relocate("org.yaml.snakeyaml")
+        relocate("io.papermc")
+        relocate("com.cryptomorin.xseries")
+        relocate("com.fasterxml.jackson")
+        relocate("org.apache.commons")
+
         archiveClassifier.set("")
-        relocate("de.tr7zw.changeme.nbtapi", "com.iridium.iridiumcore.dependencies.nbtapi")
-        relocate("com.iridium.iridiumcolorapi", "com.iridium.iridiumcore.dependencies.iridiumcolorapi")
-        relocate("org.yaml.snakeyaml", "com.iridium.iridiumcore.dependencies.snakeyaml")
-        relocate("io.papermc.lib", "com.iridium.iridiumcore.dependencies.paperlib")
-        relocate("com.cryptomorin.xseries", "com.iridium.iridiumcore.dependencies.xseries")
-        relocate("com.fasterxml.jackson", "com.iridium.iridiumcore.dependencies.fasterxml")
-        relocate("org.apache.commons", "com.iridium.iridiumcore.dependencies.commons")
     }
 
     compileJava {
