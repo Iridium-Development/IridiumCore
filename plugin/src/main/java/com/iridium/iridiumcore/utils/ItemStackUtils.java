@@ -1,7 +1,9 @@
 package com.iridium.iridiumcore.utils;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSkull;
+import com.cryptomorin.xseries.profiles.builder.XSkull;
+import com.cryptomorin.xseries.profiles.objects.Profileable;
+import com.cryptomorin.xseries.reflection.XReflection;
 import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import de.tr7zw.changeme.nbtapi.NBT;
@@ -24,7 +26,7 @@ import java.util.regex.Pattern;
  * Class which creates {@link ItemStack}'s.
  */
 public class ItemStackUtils {
-    private static final boolean supports = XMaterial.supports(16);
+    private static final boolean supports = XReflection.supports(16);
 
     private static final HashMap<String, UUID> uuidMap = new HashMap<>();
 
@@ -70,7 +72,7 @@ public class ItemStackUtils {
                 skullData = SkinUtils.getHeadData(SkinUtils.getUUID(skullData));
             }
 
-            itemStack = XSkull.of(itemStack).profile(skullData).apply();
+            itemStack = XSkull.of(itemStack).profile(Profileable.detect(skullData)).apply();
         }
 
         return itemStack;
