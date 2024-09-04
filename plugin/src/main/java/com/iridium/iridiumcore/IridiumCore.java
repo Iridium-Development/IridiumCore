@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore;
 
 import com.iridium.iridiumcore.gui.GUI;
+import com.iridium.iridiumcore.multiversion.IridiumInventory;
 import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
 import io.papermc.lib.PaperLib;
@@ -28,6 +29,7 @@ public class IridiumCore extends JavaPlugin {
     private Persist persist;
     private NMS nms;
     private MultiVersion multiVersion;
+    private IridiumInventory iridiumInventory;
     @Setter
     @Getter
     private static boolean testing = false;
@@ -85,9 +87,9 @@ public class IridiumCore extends JavaPlugin {
 
         // Automatically update all inventories
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getServer().getOnlinePlayers().forEach(player -> {
-            InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
+            InventoryHolder inventoryHolder = iridiumInventory.getTopInventory(player).getHolder();
             if (inventoryHolder instanceof GUI) {
-                ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
+                ((GUI) inventoryHolder).addContent(iridiumInventory.getTopInventory(player));
             }
         }), 0, 1);
     }
@@ -130,9 +132,11 @@ public class IridiumCore extends JavaPlugin {
 
             this.nms = minecraftVersion.getNms();
             this.multiVersion = minecraftVersion.getMultiVersion(this);
+            this.iridiumInventory = minecraftVersion.getInventory();
         } catch (Exception exception) {
             this.nms = MinecraftVersion.DEFAULT.getNms();
             this.multiVersion = MinecraftVersion.DEFAULT.getMultiVersion(this);
+            this.iridiumInventory = MinecraftVersion.DEFAULT.getInventory();
         }
     }
 
@@ -156,5 +160,4 @@ public class IridiumCore extends JavaPlugin {
     public static IridiumCore getInstance() {
         return instance;
     }
-
 }
