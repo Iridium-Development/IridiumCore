@@ -51,13 +51,6 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
-        relocate("de.tr7zw.changeme.nbtapi", "com.iridium.iridiumcore.dependencies.nbtapi")
-        relocate("com.iridium.iridiumcolorapi", "com.iridium.iridiumcore.dependencies.iridiumcolorapi")
-        relocate("org.yaml.snakeyaml", "com.iridium.iridiumcore.dependencies.snakeyaml")
-        relocate("io.papermc.lib", "com.iridium.iridiumcore.dependencies.paperlib")
-        relocate("com.cryptomorin.xseries", "com.iridium.iridiumcore.dependencies.xseries")
-        relocate("com.fasterxml.jackson", "com.iridium.iridiumcore.dependencies.fasterxml")
-        relocate("org.apache.commons", "com.iridium.iridiumcore.dependencies.commons")
     }
 
     compileJava {
