@@ -1,10 +1,12 @@
 package com.iridium.iridiumcore.gui;
 
 import com.iridium.iridiumcore.Background;
+import com.iridium.iridiumcore.IridiumCore;
 import com.iridium.iridiumcore.Item;
 import com.iridium.iridiumcore.utils.InventoryUtils;
 import com.iridium.iridiumcore.utils.ItemStackUtils;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -36,17 +38,20 @@ public abstract class PagedGUI<T> implements GUI {
         this.backButton = null;
     }
 
-    public PagedGUI(int page, int size, Background background, Item previousPage, Item nextPage, Inventory previousInventory, Item backButton) {
+    public PagedGUI(int page, int size, Background background, Item previousPage, Item nextPage, Player player, Item backButton) {
         this.page = page;
         this.size = size;
         this.background = background;
         this.previousPage = previousPage;
         this.nextPage = nextPage;
-        if (previousInventory == null) {
+
+        if (player == null) {
             this.previousInventory = null;
         } else {
+            Inventory previousInventory = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
             this.previousInventory = previousInventory.getType() == InventoryType.CHEST ? previousInventory : null;
         }
+
         this.backButton = backButton;
     }
 
