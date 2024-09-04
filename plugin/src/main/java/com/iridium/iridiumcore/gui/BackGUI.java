@@ -19,10 +19,10 @@ public abstract class BackGUI implements GUI {
         this.background = background;
         this.backButton = backButton;
 
-        Inventory previousInventory = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
-        if (previousInventory == null) {
+        if (player == null) {
             this.previousInventory = null;
         } else {
+            Inventory previousInventory = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
             this.previousInventory = previousInventory.getType() == InventoryType.CHEST ? previousInventory : null;
         }
     }

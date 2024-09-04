@@ -45,10 +45,10 @@ public abstract class PagedGUI<T> implements GUI {
         this.previousPage = previousPage;
         this.nextPage = nextPage;
 
-        Inventory previousInventory = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
-        if (previousInventory == null) {
+        if (player == null) {
             this.previousInventory = null;
         } else {
+            Inventory previousInventory = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
             this.previousInventory = previousInventory.getType() == InventoryType.CHEST ? previousInventory : null;
         }
 
