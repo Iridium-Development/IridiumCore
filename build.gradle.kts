@@ -1,11 +1,11 @@
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.github.goooler.shadow") version "8.1.8"
 }
 
 group = "com.iridium"
-version = "2.0.6"
+version = "2.0.7"
 description = "IridiumCore"
 
 allprojects {
