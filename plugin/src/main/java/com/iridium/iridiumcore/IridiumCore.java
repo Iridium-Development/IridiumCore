@@ -126,6 +126,14 @@ public class IridiumCore extends JavaPlugin {
      * Automatically gets the correct {@link MultiVersion} and {@link NMS} support from the Minecraft server version.
      */
     private void setupMultiVersion() {
+        // Band-aid fix for 1.20.5 & 1.20.6, where the code below fails to find the correct version
+        if (Bukkit.getVersion().contains("1.20.5") || Bukkit.getVersion().contains("1.20.6")) {
+            this.nms = MinecraftVersion.V1_20_R4.getNms();
+            this.multiVersion = MinecraftVersion.V1_20_R4.getMultiVersion(this);
+            this.iridiumInventory = MinecraftVersion.V1_20_R4.getInventory();
+            return;
+        }
+
         try {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             MinecraftVersion minecraftVersion = MinecraftVersion.byName(version);
