@@ -105,6 +105,24 @@ public class NMS_V1_9_R1 implements NMS {
         sendSubTitle(player, subtitle, fadeIn, displayTime, fadeOut);
     }
 
+    @Override
+    public void sendHologram(Player player, Location location, List<String> text) {
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        for (int i = -1; ++i < text.size(); ) {
+            EntityArmorStand entityArmorStand = new EntityArmorStand(craftWorld.getHandle(), location.getX(), location.getY(), location.getZ());
+
+            entityArmorStand.setInvisible(true);
+            entityArmorStand.setCustomNameVisible(true);
+            entityArmorStand.setCustomName(text.get(i));
+
+            PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entityArmorStand);
+            PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(entityArmorStand.getId(), entityArmorStand.getDataWatcher(), true);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutSpawnEntityLiving);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutEntityMetadata);
+            location = location.subtract(0, 0.4, 0);
+        }
+    }
+
     /**
      * Sends a subtitle with the provided properties to the Player.
      *

@@ -91,17 +91,35 @@ public class NMS_V1_8_R2 implements NMS {
     /**
      * Sends a title with the provided properties to the Player.
      *
-     * @param player The Player which should see the title
-     * @param title The upper message of the title
-     * @param subtitle The lower message of the title
-     * @param fadeIn The amount of time this title should fade in in ticks
+     * @param player      The Player which should see the title
+     * @param title       The upper message of the title
+     * @param subtitle    The lower message of the title
+     * @param fadeIn      The amount of time this title should fade in in ticks
      * @param displayTime The amount of time this title should stay fully visible in ticks
-     * @param fadeOut The amount of time this title should fade out in ticks
+     * @param fadeOut     The amount of time this title should fade out in ticks
      */
     @Override
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int displayTime, int fadeOut) {
         sendTitle(player, title, fadeIn, displayTime, fadeOut);
         sendSubTitle(player, subtitle, fadeIn, displayTime, fadeOut);
+    }
+
+    @Override
+    public void sendHologram(Player player, Location location, List<String> text) {
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        for (int i = -1; ++i < text.size(); ) {
+            EntityArmorStand entityArmorStand = new EntityArmorStand(craftWorld.getHandle(), location.getX(), location.getY(), location.getZ());
+
+            entityArmorStand.setInvisible(true);
+            entityArmorStand.setCustomNameVisible(true);
+            entityArmorStand.setCustomName(text.get(i));
+
+            PacketPlayOutSpawnEntityLiving packetPlayOutSpawnEntityLiving = new PacketPlayOutSpawnEntityLiving(entityArmorStand);
+            PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(entityArmorStand.getId(), entityArmorStand.getDataWatcher(), true);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutSpawnEntityLiving);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packetPlayOutEntityMetadata);
+            location = location.subtract(0, 0.4, 0);
+        }
     }
 
     /**

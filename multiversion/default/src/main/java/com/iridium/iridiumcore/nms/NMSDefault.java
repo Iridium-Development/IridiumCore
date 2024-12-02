@@ -96,6 +96,11 @@ public class NMSDefault implements NMS {
     }
 
     @Override
+    public void sendHologram(Player player, Location location, List<String> text) {
+
+    }
+
+    @Override
     public double[] getTPS() {
         return new double[]{};
     }
