@@ -44,12 +44,22 @@ dependencies {
 }
 
 tasks {
-    jar {
+    // Add the shadowJar task to the build task
+    build {
         dependsOn(shadowJar)
-        enabled = false
     }
 
     shadowJar {
+        fun relocate(origin: String) = relocate(origin, "com.iridium.iridiumcore.dependencies${origin.substring(origin.lastIndexOf('.'))}")
+
+        relocate("de.tr7zw.changeme.nbtapi")
+        relocate("com.iridium.iridiumcolorapi")
+        relocate("org.yaml.snakeyaml")
+        relocate("io.papermc")
+        relocate("com.cryptomorin.xseries")
+        relocate("com.fasterxml.jackson")
+        relocate("org.apache.commons")
+
         archiveClassifier.set("")
     }
 
