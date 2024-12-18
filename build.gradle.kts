@@ -25,7 +25,7 @@ allprojects {
 
     dependencies {
         // Dependencies that we want to shade in
-        implementation("com.github.cryptomorin:XSeries:11.3.0")
+        implementation("com.github.cryptomorin:XSeries:12.1.0")
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.jetbrains:annotations:25.0.0")
