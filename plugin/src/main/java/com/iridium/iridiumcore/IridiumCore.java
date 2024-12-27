@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore;
 
 import com.iridium.iridiumcore.gui.GUI;
+import com.iridium.iridiumcore.multiversion.IridiumInventory;
 import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
 import io.papermc.lib.PaperLib;
@@ -28,6 +29,7 @@ public class IridiumCore extends JavaPlugin {
     private Persist persist;
     private NMS nms;
     private MultiVersion multiVersion;
+    private IridiumInventory iridiumInventory;
     @Setter
     @Getter
     private static boolean testing = false;
@@ -51,6 +53,7 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onLoad() {
+        instance = this;
         // Create the data folder in order to make Jackson work
         getDataFolder().mkdir();
 
@@ -65,7 +68,6 @@ public class IridiumCore extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        instance = this;
         setupMultiVersion();
 
         if (!PaperLib.isSpigot() && !isTesting()) {
@@ -85,9 +87,9 @@ public class IridiumCore extends JavaPlugin {
 
         // Automatically update all inventories
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getServer().getOnlinePlayers().forEach(player -> {
-            InventoryHolder inventoryHolder = player.getOpenInventory().getTopInventory().getHolder();
+            InventoryHolder inventoryHolder = iridiumInventory.getTopInventory(player).getHolder();
             if (inventoryHolder instanceof GUI) {
-                ((GUI) inventoryHolder).addContent(player.getOpenInventory().getTopInventory());
+                ((GUI) inventoryHolder).addContent(iridiumInventory.getTopInventory(player));
             }
         }), 0, 1);
     }
@@ -124,15 +126,25 @@ public class IridiumCore extends JavaPlugin {
      * Automatically gets the correct {@link MultiVersion} and {@link NMS} support from the Minecraft server version.
      */
     private void setupMultiVersion() {
+        // Band-aid fix for 1.20.5 & 1.20.6, where the code below fails to find the correct version
+        if (Bukkit.getVersion().contains("1.20.5") || Bukkit.getVersion().contains("1.20.6")) {
+            this.nms = MinecraftVersion.V1_20_R4.getNms();
+            this.multiVersion = MinecraftVersion.V1_20_R4.getMultiVersion(this);
+            this.iridiumInventory = MinecraftVersion.V1_20_R4.getInventory();
+            return;
+        }
+
         try {
             String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
             MinecraftVersion minecraftVersion = MinecraftVersion.byName(version);
 
             this.nms = minecraftVersion.getNms();
             this.multiVersion = minecraftVersion.getMultiVersion(this);
+            this.iridiumInventory = minecraftVersion.getInventory();
         } catch (Exception exception) {
             this.nms = MinecraftVersion.DEFAULT.getNms();
             this.multiVersion = MinecraftVersion.DEFAULT.getMultiVersion(this);
+            this.iridiumInventory = MinecraftVersion.DEFAULT.getInventory();
         }
     }
 
@@ -156,5 +168,4 @@ public class IridiumCore extends JavaPlugin {
     public static IridiumCore getInstance() {
         return instance;
     }
-
 }

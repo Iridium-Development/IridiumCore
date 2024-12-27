@@ -2,8 +2,6 @@ package com.iridium.iridiumcore.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,10 +25,6 @@ public class SkinUtils {
     private static final String steveSkin = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3YWY5ZTQ0MTEyMTdjN2RlOWM2MGFjYmQzYzNmZDY1MTk3ODMzMzJhMWIzYmM1NmZiZmNlOTA3MjFlZjM1In19fQ==";
 
     public static UUID getUUID(String username) {
-        if (!isValidUsername(username)) {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(username);
-            return player.getUniqueId();
-        }
         if (!uuidCache.containsKey(username)) {
             uuidCache.put(username, loadingUUID);
             CompletableFuture.runAsync(() -> {
@@ -55,7 +49,7 @@ public class SkinUtils {
     }
 
     public static String getHeadData(UUID uuid) {
-        if (uuid.equals(loadingUUID) || isBedrockPlayer(uuid)) return steveSkin;
+        if (uuid.equals(loadingUUID)) return steveSkin;
         if (!cache.containsKey(uuid)) {
             cache.put(uuid, steveSkin);
             CompletableFuture.runAsync(() -> {
@@ -90,7 +84,7 @@ public class SkinUtils {
             String str;
             while ((str = in.readLine()) != null) stringBuilder.append(str);
         } catch (Exception exception) {
-            exception.printStackTrace();
+//            exception.printStackTrace();
         } finally {
             try {
                 if (in != null) in.close();
@@ -101,11 +95,4 @@ public class SkinUtils {
         return stringBuilder.toString();
     }
 
-    private static boolean isValidUsername(String input) {
-        return input != null && input.matches("\\w{3,16}");
-    }
-    
-    private static boolean isBedrockPlayer(UUID uuid) {
-        return uuid.toString().contains("00000000-0000-0000"); // Bedrock Player (GeyserMC)
-    }
 }

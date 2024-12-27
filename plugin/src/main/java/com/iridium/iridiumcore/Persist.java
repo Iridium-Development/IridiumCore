@@ -1,8 +1,13 @@
 package com.iridium.iridiumcore;
 
+import com.cryptomorin.xseries.XBiome;
+import com.cryptomorin.xseries.XEnchantment;
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XPotion;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import org.bukkit.Bukkit;
@@ -35,6 +40,18 @@ public class Persist {
         this.javaPlugin = javaPlugin;
 
         objectMapper = new ObjectMapper(persistType.getFactory()).configure(JsonParser.Feature.IGNORE_UNDEFINED, true);
+
+        // Registering the XSeries (de)serializers.
+        SimpleModule xSeriesModule = new SimpleModule();
+        xSeriesModule.addSerializer(XMaterial.class, new XSeriesSerialSupplier.XMaterialSerializer());
+        xSeriesModule.addDeserializer(XMaterial.class, new XSeriesSerialSupplier.XMaterialDeserializer());
+        xSeriesModule.addSerializer(XPotion.class, new XSeriesSerialSupplier.XPotionSerializer());
+        xSeriesModule.addDeserializer(XPotion.class, new XSeriesSerialSupplier.XPotionDeserializer());
+        xSeriesModule.addSerializer(XEnchantment.class, new XSeriesSerialSupplier.XEnchantmentSerializer());
+        xSeriesModule.addDeserializer(XEnchantment.class, new XSeriesSerialSupplier.XEnchantmentDeserializer());
+        xSeriesModule.addSerializer(XBiome.class, new XSeriesSerialSupplier.XBiomeSerializer());
+        xSeriesModule.addDeserializer(XBiome.class, new XSeriesSerialSupplier.XBiomeDeserializer());
+        objectMapper.registerModule(xSeriesModule);
     }
 
     /**
@@ -195,8 +212,8 @@ public class Persist {
                 try {
                     if (!backupFolder.exists()) backupFolder.mkdir();
                     Files.copy(file.toPath(), backupConfigFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    file.renameTo(new File(javaPlugin.getDataFolder(), file.getName() + "_BROKEN"));
-
+                    Files.delete(file.toPath());
+                    javaPlugin.getLogger().info("Success! Backup \"" + file.getName() + "\" created, check \"" + backupFolder.getPath() + "\".");
                 } catch (IOException exception) {
                     javaPlugin.getLogger().severe(
                             "Failed to move " + file + " to "
@@ -205,10 +222,7 @@ public class Persist {
                                     + exception.getMessage());
                     Bukkit.getPluginManager().disablePlugin(javaPlugin);
                 }
-
-                javaPlugin.getLogger().info("Success! Backup \"" + file.getName() + "\" created, check \"" + backupFolder.getPath() + "\".");
                 load(clazz, file);
-
             }
         }
 
