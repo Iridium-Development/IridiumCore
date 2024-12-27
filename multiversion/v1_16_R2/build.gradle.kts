@@ -1,5 +1,5 @@
 dependencies {
-    compileOnly("org.spigotmc:spigot:1.16.3")
+    compileOnly("org.spigotmc:spigot:1.21.4")
     compileOnly(project(":multiversion:common"))
     compileOnly("io.papermc:paperlib:1.0.8")
 }
