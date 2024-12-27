@@ -144,7 +144,7 @@ public class XSeriesSerialSupplier {
         public XBiome deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
             String xBiome = node.toString();
-            return XBiome.matchXBiome(xBiome).get();
+            return XBiome.of(xBiome).get();
         }
     }
 }
