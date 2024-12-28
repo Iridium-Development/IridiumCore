@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class XSeriesSerialSupplier {
 
@@ -28,7 +29,7 @@ public class XSeriesSerialSupplier {
 
         @Override
         public void serialize(XMaterial xMaterial, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(xMaterial.toString());
+            jsonGenerator.writeString(xMaterial.name());
         }
     }
 
@@ -44,8 +45,12 @@ public class XSeriesSerialSupplier {
         @Override
         public XMaterial deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            String xMaterial = node.toString();
-            return XMaterial.matchXMaterial(xMaterial).get();
+            String xMaterial = node.toString().replace("\"", "");
+            Optional<XMaterial> optional = XMaterial.matchXMaterial(xMaterial);
+            if(!optional.isPresent()){
+                IridiumCore.getInstance().getLogger().warning("Could not deserialize "+xMaterial+" to a Material, defaulting to AIR");
+            }
+            return optional.orElse(XMaterial.AIR);
         }
     }
 
@@ -60,7 +65,7 @@ public class XSeriesSerialSupplier {
 
         @Override
         public void serialize(XPotion xPotion, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(xPotion.toString());
+            jsonGenerator.writeString(xPotion.name());
         }
     }
 
@@ -76,8 +81,12 @@ public class XSeriesSerialSupplier {
         @Override
         public XPotion deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            String xPotion = node.toString();
-            return XPotion.of(xPotion).get();
+            String xPotion = node.toString().replace("\"", "");
+            Optional<XPotion> optional = XPotion.of(xPotion);
+            if(!optional.isPresent()){
+                IridiumCore.getInstance().getLogger().warning("Could not deserialize "+xPotion+" to a Potion, defaulting to LUCK");
+            }
+            return optional.orElse(XPotion.LUCK);
         }
     }
 
@@ -92,7 +101,7 @@ public class XSeriesSerialSupplier {
 
         @Override
         public void serialize(XEnchantment xEnchantment, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(xEnchantment.toString());
+            jsonGenerator.writeString(xEnchantment.name());
         }
     }
 
@@ -108,8 +117,12 @@ public class XSeriesSerialSupplier {
         @Override
         public XEnchantment deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            String xEnchantment = node.toString();
-            return XEnchantment.of(xEnchantment).get();
+            String xEnchantment = node.toString().replace("\"", "");
+            Optional<XEnchantment> optional = XEnchantment.of(xEnchantment);
+            if(!optional.isPresent()){
+                IridiumCore.getInstance().getLogger().warning("Could not deserialize "+xEnchantment+" to an Enchantment, defaulting to WIND_BURST");
+            }
+            return optional.orElse(XEnchantment.WIND_BURST);
         }
     }
 
@@ -124,7 +137,7 @@ public class XSeriesSerialSupplier {
 
         @Override
         public void serialize(XBiome xBiome, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(xBiome.toString());
+            jsonGenerator.writeString(xBiome.name());
         }
     }
 
@@ -140,8 +153,12 @@ public class XSeriesSerialSupplier {
         @Override
         public XBiome deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            String xBiome = node.toString();
-            return XBiome.of(xBiome).get();
+            String xBiome = node.toString().replace("\"", "");
+            Optional<XBiome> optional = XBiome.of(xBiome);
+            if(!optional.isPresent()){
+                IridiumCore.getInstance().getLogger().warning("Could not deserialize "+xBiome+" to a Biome, defaulting to Plains");
+            }
+            return optional.orElse(XBiome.PLAINS);
         }
     }
 
@@ -156,7 +173,7 @@ public class XSeriesSerialSupplier {
 
         @Override
         public void serialize(XSound xSound, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(xSound.toString());
+            jsonGenerator.writeString(xSound.name());
         }
     }
 
@@ -172,8 +189,12 @@ public class XSeriesSerialSupplier {
         @Override
         public XSound deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            String xSound = node.toString();
-            return XSound.of(xSound).get();
+            String xSound = node.toString().replace("\"", "");
+            Optional<XSound> optional = XSound.of(xSound);
+            if(!optional.isPresent()){
+                IridiumCore.getInstance().getLogger().warning("Could not deserialize "+xSound+" to a Sound, defaulting to ENTITY_PLAYER_LEVELUP");
+            }
+            return optional.orElse(XSound.ENTITY_PLAYER_LEVELUP);
         }
     }
 
@@ -188,7 +209,7 @@ public class XSeriesSerialSupplier {
 
         @Override
         public void serialize(XEntityType xEntityType, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeString(xEntityType.toString());
+            jsonGenerator.writeString(xEntityType.name());
         }
     }
 
@@ -204,8 +225,12 @@ public class XSeriesSerialSupplier {
         @Override
         public XEntityType deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-            String xEntityType = node.toString();
-            return XEntityType.of(xEntityType).get();
+            String xEntityType = node.toString().replace("\"", "");
+            Optional<XEntityType> optional = XEntityType.of(xEntityType);
+            if(!optional.isPresent()){
+                IridiumCore.getInstance().getLogger().warning("Could not deserialize "+xEntityType+" to an EntityType, defaulting to WOLF");
+            }
+            return optional.orElse(XEntityType.WOLF);
         }
     }
 }
