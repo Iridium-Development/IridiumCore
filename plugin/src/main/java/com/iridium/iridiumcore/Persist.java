@@ -1,9 +1,6 @@
 package com.iridium.iridiumcore;
 
-import com.cryptomorin.xseries.XBiome;
-import com.cryptomorin.xseries.XEnchantment;
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XPotion;
+import com.cryptomorin.xseries.*;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +48,10 @@ public class Persist {
         xSeriesModule.addDeserializer(XEnchantment.class, new XSeriesSerialSupplier.XEnchantmentDeserializer());
         xSeriesModule.addSerializer(XBiome.class, new XSeriesSerialSupplier.XBiomeSerializer());
         xSeriesModule.addDeserializer(XBiome.class, new XSeriesSerialSupplier.XBiomeDeserializer());
+        xSeriesModule.addSerializer(XSound.class, new XSeriesSerialSupplier.XSoundSerializer());
+        xSeriesModule.addDeserializer(XSound.class, new XSeriesSerialSupplier.XSoundDeserializer());
+        xSeriesModule.addSerializer(XEntityType.class, new XSeriesSerialSupplier.XEntityTypeSerializer());
+        xSeriesModule.addDeserializer(XEntityType.class, new XSeriesSerialSupplier.XEntityTypeDeserializer());
         objectMapper.registerModule(xSeriesModule);
     }
 
