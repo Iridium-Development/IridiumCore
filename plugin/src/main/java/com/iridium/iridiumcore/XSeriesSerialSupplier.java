@@ -1,9 +1,6 @@
 package com.iridium.iridiumcore;
 
-import com.cryptomorin.xseries.XBiome;
-import com.cryptomorin.xseries.XEnchantment;
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XPotion;
+import com.cryptomorin.xseries.*;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -80,7 +77,7 @@ public class XSeriesSerialSupplier {
         public XPotion deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
             String xPotion = node.toString();
-            return XPotion.matchXPotion(xPotion).get();
+            return XPotion.of(xPotion).get();
         }
     }
 
@@ -112,7 +109,7 @@ public class XSeriesSerialSupplier {
         public XEnchantment deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
             String xEnchantment = node.toString();
-            return XEnchantment.matchXEnchantment(xEnchantment).get();
+            return XEnchantment.of(xEnchantment).get();
         }
     }
 
@@ -145,6 +142,70 @@ public class XSeriesSerialSupplier {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
             String xBiome = node.toString();
             return XBiome.of(xBiome).get();
+        }
+    }
+
+    /**
+     * XSound serializer for XSeries version < 10.0.0.
+     */
+    public static class XSoundSerializer extends StdSerializer<XSound> {
+
+        public XSoundSerializer() {
+            super(XSound.class);
+        }
+
+        @Override
+        public void serialize(XSound xSound, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+            jsonGenerator.writeString(xSound.toString());
+        }
+    }
+
+    /**
+     * XSound deserializer for XSeries version >= 10.0.0.
+     */
+    public static class XSoundDeserializer extends StdDeserializer<XSound> {
+
+        public XSoundDeserializer() {
+            super(XSound.class);
+        }
+
+        @Override
+        public XSound deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+            JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+            String xSound = node.toString();
+            return XSound.of(xSound).get();
+        }
+    }
+
+    /**
+     * XSound serializer for XSeries version < 10.0.0.
+     */
+    public static class XEntityTypeSerializer extends StdSerializer<XEntityType> {
+
+        public XEntityTypeSerializer() {
+            super(XEntityType.class);
+        }
+
+        @Override
+        public void serialize(XEntityType xEntityType, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+            jsonGenerator.writeString(xEntityType.toString());
+        }
+    }
+
+    /**
+     * XSound deserializer for XSeries version >= 10.0.0.
+     */
+    public static class XEntityTypeDeserializer extends StdDeserializer<XEntityType> {
+
+        public XEntityTypeDeserializer() {
+            super(XEntityType.class);
+        }
+
+        @Override
+        public XEntityType deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+            JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+            String xEntityType = node.toString();
+            return XEntityType.of(xEntityType).get();
         }
     }
 }
