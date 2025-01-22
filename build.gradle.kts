@@ -28,7 +28,7 @@ allprojects {
         implementation("com.github.cryptomorin:XSeries:13.0.0")
 
         // Other dependencies that are not required or already available at runtime
-        compileOnly("org.jetbrains:annotations:26.0.1")
+        compileOnly("org.jetbrains:annotations:26.0.2")
         compileOnly("org.projectlombok:lombok:1.18.36")
         // This is needed for XSkin, but isnt added to the XSeries jar, potentially a bug that will be fixed in a later release
         compileOnly("com.mojang:authlib:1.5.25")
