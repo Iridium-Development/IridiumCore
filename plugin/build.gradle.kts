@@ -4,7 +4,7 @@ dependencies {
     multiVersionProjects.forEach { implementation(it) }
 
     // Dependencies that we want to shade in
-    implementation("de.tr7zw:item-nbt-api:2.14.1")
+    implementation("de.tr7zw:item-nbt-api:2.15.0")
     implementation("com.iridium:IridiumColorAPI:1.0.9")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
     implementation("com.fasterxml.jackson.core:jackson-core:2.18.3")
