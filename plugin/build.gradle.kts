@@ -16,7 +16,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.18.0")
 
     // Other dependencies that are not required or already available at runtime
-    compileOnly("org.jetbrains:annotations:26.0.2")
+    compileOnly("org.jetbrains:annotations:26.0.2-1")
     compileOnly("org.spigotmc:spigot-api:1.21.4-R0.1-SNAPSHOT")
 }
 
