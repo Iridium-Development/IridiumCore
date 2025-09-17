@@ -65,6 +65,11 @@ public class ItemStackUtils {
     public static ItemStack makeItem(Item item, List<Placeholder> placeholders) {
         ItemStack itemStack = makeItem(item.material, item.amount, StringUtils.processMultiplePlaceholders(item.displayName, placeholders), StringUtils.processMultiplePlaceholders(item.lore, placeholders));
 
+        // Apply custom model data if specified
+        if (item.model != null) {
+            itemStack = setModel(item.model, itemStack);
+        }
+
 //        Removed until https://github.com/CryptoMorin/XSeries/issues/266 is fixed
         if (item.material == XMaterial.PLAYER_HEAD && item.skullData != null && !item.skullData.isEmpty() && !IridiumCore.isTesting()) {
             String skullData = StringUtils.processMultiplePlaceholders(item.skullData, placeholders);
