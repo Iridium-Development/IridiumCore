@@ -26,18 +26,18 @@ public abstract class BackGUI implements GUI {
             return;
         }
 
-        Inventory previousInventory = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
-        if (previousInventory == null || previousInventory.getType() != InventoryType.CHEST) {
+        Inventory prevInv = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
+        if (prevInv == null || prevInv.getType() != InventoryType.CHEST) {
             this.previousInventory = null;
             return;
         }
 
-        if (backButtonBehavior == BackButtonBehavior.ONLY_SKYBLOCK) {
-            this.previousInventory = isSkyblockInventory(previousInventory) ? previousInventory : null;
+        if (backButtonBehavior == BackButtonBehavior.ONLY_SKYBLOCK && !isSkyblockInventory(prevInv)) {
+            this.previousInventory = null;
             return;
         }
 
-        this.previousInventory = previousInventory;
+        this.previousInventory = prevInv;
     }
 
     private boolean isSkyblockInventory(Inventory inventory) {
@@ -47,15 +47,26 @@ public abstract class BackGUI implements GUI {
     @Override
     public void addContent(Inventory inventory) {
         InventoryUtils.fillInventory(inventory, background);
-        if (previousInventory != null && backButtonBehavior != BackButtonBehavior.DISABLED) {
-            inventory.setItem(inventory.getSize() + backButton.slot, ItemStackUtils.makeItem(backButton));
+
+        if (previousInventory == null || backButtonBehavior == BackButtonBehavior.DISABLED) {
+            return;
         }
+
+        int backSlot = inventory.getSize() + backButton.slot;
+        inventory.setItem(backSlot, ItemStackUtils.makeItem(backButton));
     }
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        if (previousInventory != null && backButtonBehavior != BackButtonBehavior.DISABLED && event.getSlot() == (event.getInventory().getSize() + backButton.slot)) {
-            event.getWhoClicked().openInventory(previousInventory);
+        if (previousInventory == null || backButtonBehavior == BackButtonBehavior.DISABLED) {
+            return;
         }
+
+        int backSlot = event.getInventory().getSize() + backButton.slot;
+        if (event.getSlot() != backSlot) {
+            return;
+        }
+
+        event.getWhoClicked().openInventory(previousInventory);
     }
 }
