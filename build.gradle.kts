@@ -29,12 +29,12 @@ allprojects {
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.jetbrains:annotations:26.0.2-1")
-        compileOnly("org.projectlombok:lombok:1.18.40")
+        compileOnly("org.projectlombok:lombok:1.18.42")
         // This is needed for XSkin, but isnt added to the XSeries jar, potentially a bug that will be fixed in a later release
         compileOnly("com.mojang:authlib:1.5.25")
 
         // Enable lombok annotation processing
-        annotationProcessor("org.projectlombok:lombok:1.18.40")
+        annotationProcessor("org.projectlombok:lombok:1.18.42")
     }
 }
 
