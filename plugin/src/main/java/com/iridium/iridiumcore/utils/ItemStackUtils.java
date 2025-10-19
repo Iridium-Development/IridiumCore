@@ -2,6 +2,8 @@ package com.iridium.iridiumcore.utils;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.profiles.builder.XSkull;
+import com.cryptomorin.xseries.profiles.exceptions.InvalidProfileException;
+import com.cryptomorin.xseries.profiles.exceptions.ProfileChangeException;
 import com.cryptomorin.xseries.profiles.objects.Profileable;
 import com.cryptomorin.xseries.reflection.XReflection;
 import com.iridium.iridiumcore.IridiumCore;
@@ -72,7 +74,11 @@ public class ItemStackUtils {
                 skullData = SkinUtils.getHeadData(SkinUtils.getUUID(skullData));
             }
 
-            itemStack = XSkull.of(itemStack).profile(Profileable.detect(skullData)).apply();
+            try {
+                itemStack = XSkull.of(itemStack).profile(Profileable.detect(skullData)).apply();
+            }catch (ProfileChangeException | InvalidProfileException e){
+                itemStack = XSkull.of(itemStack).profile(Profileable.detect(SkinUtils.steveSkin)).apply();
+            }
         }
 
         return itemStack;
