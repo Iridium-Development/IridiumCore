@@ -38,7 +38,7 @@ jobs:
         id: version
         with:
           file: "build.gradle.kts"
-      - uses: actions/download-artifact@v4.3.0
+      - uses: actions/download-artifact@v5.0.0
         with:
           name: "IridiumCore"
           path: "./"
@@ -61,7 +61,7 @@ jobs:
           file: "build.gradle.kts"
 
       - name: Download build artifact
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v5.0.0
         with:
           name: "IridiumCore"
           path: "./"
