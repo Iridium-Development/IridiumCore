@@ -13,7 +13,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
     implementation("org.yaml:snakeyaml:2.5")
     implementation("io.papermc:paperlib:1.0.8")
-    implementation("org.apache.commons:commons-lang3:3.19.0")
+    implementation("org.apache.commons:commons-lang3:3.20.0")
 
     // Other dependencies that are not required or already available at runtime
     compileOnly("org.jetbrains:annotations:26.0.2-1")
