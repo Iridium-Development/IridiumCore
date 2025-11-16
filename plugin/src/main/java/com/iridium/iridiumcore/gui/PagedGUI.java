@@ -6,6 +6,7 @@ import com.iridium.iridiumcore.Item;
 import com.iridium.iridiumcore.utils.InventoryUtils;
 import com.iridium.iridiumcore.utils.ItemStackUtils;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -57,31 +59,39 @@ public abstract class PagedGUI<T> implements GUI {
 
     @Override
     public void addContent(Inventory inventory) {
-        items.clear();
-        InventoryUtils.fillInventory(inventory, background);
+        getAsyncPageObjects().thenAccept(pageObjects -> Bukkit.getScheduler().runTask(IridiumCore.getInstance(), () -> {
+            items.clear();
+            InventoryUtils.fillInventory(inventory, background);
 
-        if (isPaged()) {
-            inventory.setItem(inventory.getSize() - 3, ItemStackUtils.makeItem(nextPage));
-            inventory.setItem(inventory.getSize() - 7, ItemStackUtils.makeItem(previousPage));
-        }
+            if (isPaged()) {
+                inventory.setItem(inventory.getSize() - 3, ItemStackUtils.makeItem(nextPage));
+                inventory.setItem(inventory.getSize() - 7, ItemStackUtils.makeItem(previousPage));
+            }
 
-        int elementsPerPage = inventory.getSize() - (isPaged() || previousInventory != null ? 9 : 0);
-        List<T> objects = getPageObjects().stream()
-                .skip((long) (page - 1) * elementsPerPage)
-                .limit(elementsPerPage)
-                .collect(Collectors.toList());
-        AtomicInteger slot = new AtomicInteger(0);
-        for (T t : objects) {
-            int currentSlot = slot.getAndIncrement();
-            items.put(currentSlot, t);
-            inventory.setItem(currentSlot, getItemStack(t));
-        }
-        if (previousInventory != null && backButton != null) {
-            inventory.setItem(inventory.getSize() + backButton.slot, ItemStackUtils.makeItem(backButton));
-        }
+            int elementsPerPage = inventory.getSize() - (isPaged() || previousInventory != null ? 9 : 0);
+            List<T> objects = pageObjects.stream()
+                    .skip((long) (page - 1) * elementsPerPage)
+                    .limit(elementsPerPage)
+                    .collect(Collectors.toList());
+            AtomicInteger slot = new AtomicInteger(0);
+            for (T t : objects) {
+                int currentSlot = slot.getAndIncrement();
+                items.put(currentSlot, t);
+                inventory.setItem(currentSlot, getItemStack(t));
+            }
+            if (previousInventory != null && backButton != null) {
+                inventory.setItem(inventory.getSize() + backButton.slot, ItemStackUtils.makeItem(backButton));
+            }
+        }));
     }
 
-    public abstract Collection<T> getPageObjects();
+    public Collection<T> getPageObjects() {
+        return Collections.emptyList();
+    }
+
+    public CompletableFuture<Collection<T>> getAsyncPageObjects() {
+        return CompletableFuture.completedFuture(getPageObjects());
+    }
 
     public abstract ItemStack getItemStack(T t);
 
