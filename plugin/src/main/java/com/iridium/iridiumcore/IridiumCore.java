@@ -1,6 +1,7 @@
 package com.iridium.iridiumcore;
 
 import com.iridium.iridiumcore.gui.GUI;
+import com.iridium.iridiumcore.logging.OtlpLogHandler;
 import com.iridium.iridiumcore.multiversion.IridiumInventory;
 import com.iridium.iridiumcore.multiversion.MultiVersion;
 import com.iridium.iridiumcore.nms.NMS;
@@ -17,6 +18,9 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The main class of this plugin which handles initialization
@@ -34,6 +38,7 @@ public class IridiumCore extends JavaPlugin {
     @Getter
     private static boolean testing = false;
     private BukkitTask saveTask;
+    private UUID sessionId = UUID.randomUUID();
 
     private static IridiumCore instance;
 
@@ -61,6 +66,26 @@ public class IridiumCore extends JavaPlugin {
         this.persist = new Persist(Persist.PersistType.YAML, this);
         loadConfigs();
         saveConfigs();
+
+        enableOpenTelemetryLogs();
+    }
+
+    public void enableOpenTelemetryLogs() {
+        getLogger().addHandler(new OtlpLogHandler("https://logging.iridiumdevelopment.net/v1/logs", getLoggingAttributes()));
+    }
+
+    public Map<String, String> getLoggingAttributes() {
+        Map<String, String> attributes = new HashMap<>();
+
+        attributes.put("ServerId", String.valueOf(getServerId()));
+        attributes.put("SessionId", String.valueOf(sessionId));
+        attributes.put("PluginName", getDescription().getName());
+
+        return attributes;
+    }
+
+    public UUID getServerId() {
+        return sessionId;
     }
 
     /**
