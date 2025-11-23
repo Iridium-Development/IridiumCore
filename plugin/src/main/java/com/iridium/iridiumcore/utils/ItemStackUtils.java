@@ -81,6 +81,10 @@ public class ItemStackUtils {
             }
         }
 
+        if (item.model != null) {
+            itemStack = setModel(item.model, itemStack);
+        }
+
         return itemStack;
     }
 
