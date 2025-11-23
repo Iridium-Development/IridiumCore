@@ -10,10 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/wrapper-validation-action@v3
+      - uses: actions/checkout@v5
+      - uses: gradle/actions/wrapper-validation@v5
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
@@ -33,12 +33,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Downloading artifact
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - uses: thecodemonkey/action-get-gradle-version@master
         id: version
         with:
           file: "build.gradle.kts"
-      - uses: actions/download-artifact@v4.3.0
+      - uses: actions/download-artifact@v5.0.0
         with:
           name: "IridiumCore"
           path: "./"
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - uses: thecodemonkey/action-get-gradle-version@master
         id: version
@@ -61,7 +61,7 @@ jobs:
           file: "build.gradle.kts"
 
       - name: Download build artifact
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v5.0.0
         with:
           name: "IridiumCore"
           path: "./"

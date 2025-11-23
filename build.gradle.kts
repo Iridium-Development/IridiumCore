@@ -1,11 +1,11 @@
 plugins {
     java
     `maven-publish`
-    id("io.github.goooler.shadow") version "8.1.8"
+    id("com.gradleup.shadow") version "9.2.2"
 }
 
 group = "com.iridium"
-version = "2.0.9"
+version = "2.0.12"
 description = "IridiumCore"
 
 allprojects {
@@ -25,16 +25,16 @@ allprojects {
 
     dependencies {
         // Dependencies that we want to shade in
-        implementation("com.github.cryptomorin:XSeries:13.3.3")
+        implementation("com.github.cryptomorin:XSeries:13.5.1")
 
         // Other dependencies that are not required or already available at runtime
         compileOnly("org.jetbrains:annotations:26.0.2-1")
-        compileOnly("org.projectlombok:lombok:1.18.40")
+        compileOnly("org.projectlombok:lombok:1.18.42")
         // This is needed for XSkin, but isnt added to the XSeries jar, potentially a bug that will be fixed in a later release
         compileOnly("com.mojang:authlib:1.5.25")
 
         // Enable lombok annotation processing
-        annotationProcessor("org.projectlombok:lombok:1.18.40")
+        annotationProcessor("org.projectlombok:lombok:1.18.42")
     }
 }
 
