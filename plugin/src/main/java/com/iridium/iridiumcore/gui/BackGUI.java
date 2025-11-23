@@ -39,6 +39,10 @@ public abstract class BackGUI implements GUI {
 
         this.previousInventory = prevInv;
     }
+    
+    public BackGUI(Background background, Player player, Item backButton) {
+        this(background, player, backButton, BackButtonBehavior.ALL);
+    }
 
     private boolean isSkyblockInventory(Inventory inventory) {
         return inventory.getHolder() instanceof GUI;
