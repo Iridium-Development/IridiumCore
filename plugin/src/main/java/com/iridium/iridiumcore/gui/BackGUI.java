@@ -32,7 +32,7 @@ public abstract class BackGUI implements GUI {
             return;
         }
 
-        if (backButtonBehavior == BackButtonBehavior.ONLY_SKYBLOCK && !isSkyblockInventory(prevInv)) {
+        if (backButtonBehavior == BackButtonBehavior.ONLY_SKYBLOCK && !isIridiumInventory(prevInv)) {
             this.previousInventory = null;
             return;
         }
@@ -44,7 +44,7 @@ public abstract class BackGUI implements GUI {
         this(background, player, backButton, BackButtonBehavior.ALL);
     }
 
-    private boolean isSkyblockInventory(Inventory inventory) {
+    private boolean isIridiumInventory(Inventory inventory) {
         return inventory.getHolder() instanceof GUI;
     }
 
