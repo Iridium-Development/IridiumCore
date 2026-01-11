@@ -4,6 +4,7 @@ import com.iridium.iridiumcore.Color;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.border.WorldBorder;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -59,8 +60,10 @@ public class NMS_V1_18_R1 implements NMS {
         worldBorder.world = ((CraftWorld) centerLocation.getWorld()).getHandle();
         worldBorder.c(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
 
+        int max = Bukkit.getServer().getMaxWorldSize();
+
         if (color == Color.OFF) {
-            worldBorder.a(Integer.MAX_VALUE);
+            worldBorder.a(max);
         } else {
             worldBorder.a(size);
         }
@@ -69,9 +72,9 @@ public class NMS_V1_18_R1 implements NMS {
         worldBorder.c(0);
 
         if (color == Color.RED) {
-            worldBorder.a(size, size - 1.0D, 20000000L);
+            worldBorder.a(size, size - 1.0D, max);
         } else if (color == Color.GREEN) {
-            worldBorder.a(size - 0.1D, size, 20000000L);
+            worldBorder.a(size - 0.1D, size, max);
         }
 
         ((CraftPlayer) player).getHandle().b.a(new ClientboundInitializeBorderPacket(worldBorder));

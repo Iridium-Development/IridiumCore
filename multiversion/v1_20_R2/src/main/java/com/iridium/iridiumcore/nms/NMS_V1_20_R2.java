@@ -74,9 +74,10 @@ public class NMS_V1_20_R2 implements NMS {
         else
             worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
 
-        
+        int max = Bukkit.getServer().getMaxWorldSize();
+
         if (color == Color.OFF) {
-            worldBorder.setSize(Integer.MAX_VALUE);
+            worldBorder.setSize(max);
         } else {
             worldBorder.setSize(size);
         }
@@ -85,9 +86,9 @@ public class NMS_V1_20_R2 implements NMS {
         worldBorder.setDamageBuffer(0);
 
         if (color == Color.RED) {
-            worldBorder.setSize(size - 0.1D, 20000000L);
+            worldBorder.setSize(size - 0.1D, max);
         } else if (color == Color.GREEN) {
-            worldBorder.setSize( size+0.1D, 20000000L);
+            worldBorder.setSize( size+0.1D, max);
         }
 
         player.setWorldBorder(worldBorder);

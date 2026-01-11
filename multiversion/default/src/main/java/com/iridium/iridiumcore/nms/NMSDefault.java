@@ -1,5 +1,6 @@
 package com.iridium.iridiumcore.nms;
 
+import com.cryptomorin.xseries.reflection.XReflection;
 import com.iridium.iridiumcore.Color;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -12,6 +13,8 @@ import java.util.List;
  * This is the implementation for V1_8_R2.
  */
 public class NMSDefault implements NMS {
+
+    int version = XReflection.MAJOR_NUMBER;
 
     /**
      * Deletes a block faster than with Spigots implementation.
@@ -56,8 +59,11 @@ public class NMSDefault implements NMS {
             worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
         }
 
+        long max = 20000000L;
+        if (version >= 17) max = Bukkit.getServer().getMaxWorldSize();
+
         if (color == Color.OFF) {
-            worldBorder.setSize(Integer.MAX_VALUE);
+            worldBorder.setSize(max);
         } else {
             worldBorder.setSize(size);
         }
@@ -66,9 +72,9 @@ public class NMSDefault implements NMS {
         worldBorder.setDamageBuffer(0);
 
         if (color == Color.RED) {
-            worldBorder.setSize(size - 0.1D, 20000000L);
+            worldBorder.setSize(size - 0.1D, max);
         } else if (color == Color.GREEN) {
-            worldBorder.setSize(size + 0.1D, 20000000L);
+            worldBorder.setSize(size + 0.1D, max);
         }
 
         player.setWorldBorder(worldBorder);
