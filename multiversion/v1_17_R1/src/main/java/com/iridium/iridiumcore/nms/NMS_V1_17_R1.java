@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.IBlockData;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.chunk.Chunk;
 import net.minecraft.world.level.chunk.ChunkSection;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftChunk;
@@ -80,8 +81,10 @@ public class NMS_V1_17_R1 implements NMS {
         worldBorder.world = ((CraftWorld) centerLocation.getWorld()).getHandle();
         worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
 
+        int max = Bukkit.getServer().getMaxWorldSize();
+
         if (color == Color.OFF) {
-            worldBorder.setSize(Integer.MAX_VALUE);
+            worldBorder.setSize(max);
         } else {
             worldBorder.setSize(size);
         }
@@ -90,9 +93,9 @@ public class NMS_V1_17_R1 implements NMS {
         worldBorder.setWarningTime(0);
 
         if (color == Color.RED) {
-            worldBorder.transitionSizeBetween(size, size - 1.0D, 20000000L);
+            worldBorder.transitionSizeBetween(size, size - 1.0D, max);
         } else if (color == Color.GREEN) {
-            worldBorder.transitionSizeBetween(size - 0.1D, size, 20000000L);
+            worldBorder.transitionSizeBetween(size - 0.1D, size, max);
         }
 
         ((CraftPlayer) player).getHandle().b.sendPacket(new ClientboundInitializeBorderPacket(worldBorder));
