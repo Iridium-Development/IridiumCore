@@ -53,11 +53,7 @@ public class NMSDefault implements NMS {
     public void sendWorldBorder(Player player, Color color, double size, Location centerLocation) {
         WorldBorder worldBorder = Bukkit.getServer().createWorldBorder();
 
-        if (centerLocation.getWorld().getEnvironment() == World.Environment.NETHER) {
-            worldBorder.setCenter(centerLocation.getBlockX() * 8 + 0.5, centerLocation.getBlockZ() * 8 + 0.5);
-        } else {
-            worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
-        }
+        worldBorder.setCenter(centerLocation.getBlockX() + 0.5, centerLocation.getBlockZ() + 0.5);
 
         long max = 20000000L;
         if (version >= 17) max = Bukkit.getServer().getMaxWorldSize();
