@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * Class which creates {@link ItemStack}'s.
  */
 public class ItemStackUtils {
-    private static final boolean supports = XReflection.supports(16);
+    private static final boolean supports = XReflection.supports(1, 16);
 
     private static final HashMap<String, UUID> uuidMap = new HashMap<>();
 
