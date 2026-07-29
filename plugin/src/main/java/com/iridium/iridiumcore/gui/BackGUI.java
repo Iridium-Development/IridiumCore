@@ -14,31 +14,63 @@ public abstract class BackGUI implements GUI {
     private final Background background;
     private final Inventory previousInventory;
     private final Item backButton;
+    private final BackButtonBehavior backButtonBehavior;
 
-    public BackGUI(Background background, Player player, Item backButton) {
+    public BackGUI(Background background, Player player, Item backButton, BackButtonBehavior backButtonBehavior) {
         this.background = background;
         this.backButton = backButton;
+        this.backButtonBehavior = backButtonBehavior;
 
-        if (player == null) {
+        if (player == null || backButtonBehavior == BackButtonBehavior.DISABLED) {
             this.previousInventory = null;
-        } else {
-            Inventory previousInventory = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
-            this.previousInventory = previousInventory.getType() == InventoryType.CHEST ? previousInventory : null;
+            return;
         }
+
+        Inventory prevInv = IridiumCore.getInstance().getIridiumInventory().getTopInventory(player);
+        if (prevInv == null || prevInv.getType() != InventoryType.CHEST) {
+            this.previousInventory = null;
+            return;
+        }
+
+        if (backButtonBehavior == BackButtonBehavior.ONLY_SKYBLOCK && !isIridiumInventory(prevInv)) {
+            this.previousInventory = null;
+            return;
+        }
+
+        this.previousInventory = prevInv;
+    }
+    
+    public BackGUI(Background background, Player player, Item backButton) {
+        this(background, player, backButton, BackButtonBehavior.ALL);
+    }
+
+    private boolean isIridiumInventory(Inventory inventory) {
+        return inventory.getHolder() instanceof GUI;
     }
 
     @Override
     public void addContent(Inventory inventory) {
         InventoryUtils.fillInventory(inventory, background);
-        if (previousInventory != null) {
-            inventory.setItem(inventory.getSize() + backButton.slot, ItemStackUtils.makeItem(backButton));
+
+        if (previousInventory == null || backButtonBehavior == BackButtonBehavior.DISABLED) {
+            return;
         }
+
+        int backSlot = inventory.getSize() + backButton.slot;
+        inventory.setItem(backSlot, ItemStackUtils.makeItem(backButton));
     }
 
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
-        if (previousInventory != null && event.getSlot() == (event.getInventory().getSize() + backButton.slot)) {
-            event.getWhoClicked().openInventory(previousInventory);
+        if (previousInventory == null || backButtonBehavior == BackButtonBehavior.DISABLED) {
+            return;
         }
+
+        int backSlot = event.getInventory().getSize() + backButton.slot;
+        if (event.getSlot() != backSlot) {
+            return;
+        }
+
+        event.getWhoClicked().openInventory(previousInventory);
     }
 }
